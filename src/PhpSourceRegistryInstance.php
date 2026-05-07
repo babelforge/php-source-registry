@@ -131,7 +131,11 @@ class PhpSourceRegistryInstance
     {
         if (null === $file = $this->getFile($filePath)) {
             $this->getVirtualFiles($filePath);
-            $file = array_last($this->files);
+            $file = $this->getFile($filePath);
+        }
+
+        if (null === $file) {
+            throw new RuntimeException("File $filePath not found");
         }
 
         return $file->getAst($reloadIfNotUpdated);

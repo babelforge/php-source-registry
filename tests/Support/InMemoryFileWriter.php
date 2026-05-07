@@ -18,6 +18,8 @@ final class InMemoryFileWriter implements FileWriterInterface
      */
     private array $contentsByPath = [];
 
+    private int $writeCount = 0;
+
     /**
      * Writes an AST for one path.
      *
@@ -41,6 +43,7 @@ final class InMemoryFileWriter implements FileWriterInterface
      */
     public function writeContent(string $filePath, string $content): void
     {
+        ++$this->writeCount;
         $this->contentsByPath[$filePath] = $content;
     }
 
@@ -76,5 +79,15 @@ final class InMemoryFileWriter implements FileWriterInterface
     public function contentFor(string $path): ?string
     {
         return $this->contentsByPath[$path] ?? null;
+    }
+
+    /**
+     * Counts writes performed by the writer.
+     *
+     * @return int
+     */
+    public function writeCount(): int
+    {
+        return $this->writeCount;
     }
 }

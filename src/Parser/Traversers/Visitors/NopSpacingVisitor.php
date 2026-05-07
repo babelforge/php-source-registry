@@ -211,6 +211,5 @@ final class NopSpacingVisitor extends AbstractNodeVisitor
         }
 
         return array_any($node->getComments(), fn ($comment) => $comment instanceof Doc);
-
     }
 }

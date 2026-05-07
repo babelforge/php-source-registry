@@ -6,6 +6,8 @@ namespace PhpNoobs\PhpSource\Tests;
 
 use PhpNoobs\PhpSource\VirtualPhpSourceFile;
 use PhpNoobs\PhpSource\VirtualPhpSourceFileCollection;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,5 +50,52 @@ final class VirtualPhpSourceFileCollectionTest extends TestCase
         $collection->merge(new VirtualPhpSourceFileCollection()->add($secondFile));
 
         self::assertSame([$firstFile, $secondFile], iterator_to_array($collection));
+    }
+
+    /**
+     * Ensures reboot clears the update flag and reparses the current nodes.
+     *
+     * @return void
+     */
+    public function testVirtualFileRebootClearsUpdateFlagAndReparsesNodes(): void
+    {
+        $virtualFile = new VirtualPhpSourceFile(
+            '/project/src/Foo.php',
+            '/project/src/Foo.php.virtual.0',
+            [
+                new Class_('OriginalName'),
+            ],
+        );
+
+        $virtualFile->update([
+            new Class_('UpdatedName'),
+        ]);
+
+        self::assertTrue($virtualFile->isUpdated());
+
+        $virtualFile->reboot();
+
+        self::assertFalse($virtualFile->isUpdated());
+        self::assertTrue($this->containsClassNamed($virtualFile->nodes, 'UpdatedName'));
+        self::assertTrue($this->containsClassNamed($virtualFile->originalNonTransformedNodes, 'UpdatedName'));
+    }
+
+    /**
+     * Checks whether a node list contains a class by name.
+     *
+     * @param array<object> $nodes The node list.
+     * @param string $className The class name.
+     *
+     * @return bool
+     */
+    private function containsClassNamed(array $nodes, string $className): bool
+    {
+        foreach ($nodes as $node) {
+            if ($node instanceof Class_ && $node->name instanceof Identifier && $node->name->toString() === $className) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
