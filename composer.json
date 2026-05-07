@@ -1,0 +1,13 @@
+{
+    "name": "php-noobs/php-source-registry",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "PhpNoobs\\PhpSource\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.4",
+        "nikic/php-parser": "^5.7"
+    }
+}
