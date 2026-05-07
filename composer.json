@@ -6,8 +6,16 @@
             "PhpNoobs\\PhpSource\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpNoobs\\PhpSource\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "php": ">=8.4",
         "nikic/php-parser": "^5.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.0"
     }
 }
