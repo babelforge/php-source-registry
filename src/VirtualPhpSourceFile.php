@@ -11,7 +11,7 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 
 /**
- * Class VirtualPhpSourceFile
+ * Class VirtualPhpSourceFile.
  *
  * Value object representing a virtual PHP file and its AST nodes.
  */
@@ -31,20 +31,20 @@ final class VirtualPhpSourceFile
     /**
      * Constructor.
      *
-     * @param string $fullFilePath The full file path.
-     * @param string $virtualFilePath The virtual file path.
-     * @param Node[] $nodes The AST nodes representing the virtual file content.
-     * @param ParserInterface $parser The parser.
-     * @param Standard $printer The printer.
-     * @param Standard $standardPrinter The standard printer.
+     * @param string          $fullFilePath    the full file path
+     * @param string          $virtualFilePath the virtual file path
+     * @param Node[]          $nodes           the AST nodes representing the virtual file content
+     * @param ParserInterface $parser          the parser
+     * @param Standard        $printer         the printer
+     * @param Standard        $standardPrinter the standard printer
      */
     public function __construct(
-        public string                        $fullFilePath,
-        public string                        $virtualFilePath,
-        array                                $nodes,
-        private readonly ParserInterface     $parser = new UserLandParser(),
-        private readonly Standard            $printer = new NopPrinter(),
-        private readonly Standard            $standardPrinter = new Standard(),
+        public string $fullFilePath,
+        public string $virtualFilePath,
+        array $nodes,
+        private readonly ParserInterface $parser = new UserLandParser(),
+        private readonly Standard $printer = new NopPrinter(),
+        private readonly Standard $standardPrinter = new Standard(),
     ) {
         $this->code = $this->standardPrinter->prettyPrintFile($nodes);
         $this->originalNonTransformedNodes = $this->parser->simpleParseCode($this->code, $this->virtualFilePath);
@@ -76,7 +76,6 @@ final class VirtualPhpSourceFile
 
     /**
      * @param Node[] $nodes
-     * @return void
      */
     public function update(array $nodes): void
     {
@@ -86,7 +85,6 @@ final class VirtualPhpSourceFile
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public function standardPrint(array $nodes): string
     {
@@ -95,7 +93,6 @@ final class VirtualPhpSourceFile
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public function print(array $nodes): string
     {

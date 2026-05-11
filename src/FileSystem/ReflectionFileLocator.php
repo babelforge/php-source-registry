@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace PhpNoobs\PhpSource\FileSystem;
 
-use ReflectionClass;
-use ReflectionException;
-use ReflectionFunction;
-
 /**
  * Resolves a class/trait/interface FQCN to its source file using PHP Reflection.
  *
@@ -16,19 +12,20 @@ use ReflectionFunction;
 final class ReflectionFileLocator
 {
     /**
-     * @var array<class-string, string>
+     * @var array<class-string, ?string>
      */
     private static array $classCache = [];
     /**
      * @var array<class-string, bool>
      */
     private static array $externalFunctionsCache = [];
+
     /**
      * Locates the source file for a given FQCN.
      *
-     * @param class-string $fqcn Fully-qualified class/trait/interface name.
+     * @param class-string $fqcn fully-qualified class/trait/interface name
      *
-     * @return string|null Absolute file path, or null if not resolvable.
+     * @return string|null absolute file path, or null if not resolvable
      */
     public function locate(string $fqcn): ?string
     {
@@ -37,13 +34,13 @@ final class ReflectionFileLocator
         }
 
         try {
-            $ref = new ReflectionClass($fqcn);
+            $ref = new \ReflectionClass($fqcn);
             $file = $ref->getFileName();
 
             if (false === $file) {
                 $file = null;
             }
-        } catch (ReflectionException) {
+        } catch (\ReflectionException) {
             $file = null;
         }
 
@@ -55,8 +52,7 @@ final class ReflectionFileLocator
     /**
      * Locate a function by its FQCN.
      *
-     * @param string $fqcn
-     * @return bool
+     * @param class-string $fqcn fully-qualified function name
      */
     public function isExternalFunction(string $fqcn): bool
     {
@@ -65,9 +61,9 @@ final class ReflectionFileLocator
         }
 
         try {
-            $ref = new ReflectionFunction($fqcn);
+            $ref = new \ReflectionFunction($fqcn);
             self::$externalFunctionsCache[$fqcn] = !$ref->isInternal();
-        } catch (ReflectionException) {
+        } catch (\ReflectionException) {
             self::$externalFunctionsCache[$fqcn] = true;
         }
 
@@ -77,9 +73,9 @@ final class ReflectionFileLocator
     /**
      * Retrieves the source code content of a file.
      *
-     * @param string $filePath Absolute path to the file.
+     * @param string $filePath absolute path to the file
      *
-     * @return string|false File content as string, or false on failure.
+     * @return string|false file content as string, or false on failure
      */
     public function getContent(string $filePath): string|false
     {

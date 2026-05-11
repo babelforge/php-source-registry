@@ -9,7 +9,7 @@ use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
 use PhpNoobs\PhpSource\Tests\Support\InMemoryFileWriter;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
-use RuntimeException;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,22 +19,20 @@ final class PhpSourceRegistryInstanceTest extends TestCase
 {
     /**
      * Ensures the registry loads virtual files, updates one AST, and saves the physical file.
-     *
-     * @return void
      */
     public function testItUpdatesAndSavesVirtualFileAst(): void
     {
         $sourcePath = tempnam(sys_get_temp_dir(), 'php-source-registry-');
         self::assertIsString($sourcePath);
         file_put_contents($sourcePath, <<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class OldName
-{
-}
-PHP);
+            final class OldName
+            {
+            }
+            PHP);
 
         $fileWriter = new InMemoryFileWriter();
         $registry = new PhpSourceRegistryInstance($fileWriter);
@@ -56,20 +54,18 @@ PHP);
 
     /**
      * Ensures the registry keeps one loaded file state for repeated calls.
-     *
-     * @return void
      */
     public function testItReturnsSameLoadedVirtualFilesForRepeatedCalls(): void
     {
         $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class CachedFile
-{
-}
-PHP);
+            final class CachedFile
+            {
+            }
+            PHP);
 
         $registry = new PhpSourceRegistryInstance();
         $firstVirtualFiles = $registry->getVirtualFiles($sourcePath);
@@ -83,20 +79,18 @@ PHP);
 
     /**
      * Ensures save does not write untouched source files.
-     *
-     * @return void
      */
     public function testSaveDoesNotWriteUnchangedFiles(): void
     {
         $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class UnchangedFile
-{
-}
-PHP);
+            final class UnchangedFile
+            {
+            }
+            PHP);
 
         $fileWriter = new InMemoryFileWriter();
         $registry = new PhpSourceRegistryInstance($fileWriter);
@@ -112,20 +106,18 @@ PHP);
 
     /**
      * Ensures the static facade clear resets the current registry instance.
-     *
-     * @return void
      */
     public function testStaticFacadeClearResetsLoadedSourceState(): void
     {
         $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class FacadeCachedFile
-{
-}
-PHP);
+            final class FacadeCachedFile
+            {
+            }
+            PHP);
 
         PhpSourceRegistry::clear();
         $firstVirtualFiles = PhpSourceRegistry::getVirtualFiles($sourcePath);
@@ -141,20 +133,18 @@ PHP);
 
     /**
      * Ensures code returns the assembled source for an unmodified file.
-     *
-     * @return void
      */
     public function testCodeReturnsAssembledSourceForUnmodifiedFile(): void
     {
         $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class PrintableFile
-{
-}
-PHP);
+            final class PrintableFile
+            {
+            }
+            PHP);
 
         $code = new PhpSourceRegistryInstance()->code($sourcePath);
 
@@ -166,20 +156,18 @@ PHP);
 
     /**
      * Ensures virtual file AST can be fetched directly and unknown paths fail clearly.
-     *
-     * @return void
      */
     public function testItReturnsVirtualFileAstAndFailsForUnknownVirtualFile(): void
     {
         $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class AstFile
-{
-}
-PHP);
+            final class AstFile
+            {
+            }
+            PHP);
 
         $registry = new PhpSourceRegistryInstance();
         $virtualFile = $registry->getVirtualFiles($sourcePath)->get(0);
@@ -189,7 +177,7 @@ PHP);
 
         self::assertNotSame([], $ast);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Virtual file /project/missing.php.virtual.0 not found');
 
         try {
@@ -201,20 +189,18 @@ PHP);
 
     /**
      * Ensures save reboots updated virtual files after writing.
-     *
-     * @return void
      */
     public function testSaveRebootsUpdatedVirtualFilesAfterWriting(): void
     {
         $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class BeforeSave
-{
-}
-PHP);
+            final class BeforeSave
+            {
+            }
+            PHP);
 
         $registry = new PhpSourceRegistryInstance(new InMemoryFileWriter());
         $virtualFile = $registry->getVirtualFiles($sourcePath)->get(0);
@@ -236,9 +222,7 @@ PHP);
     /**
      * Creates a temporary PHP source file.
      *
-     * @param string $code The PHP source code.
-     *
-     * @return string
+     * @param string $code the PHP source code
      */
     private function createTemporaryPhpFile(string $code): string
     {
@@ -252,10 +236,8 @@ PHP);
     /**
      * Renames the first class found in a node list.
      *
-     * @param array<object> $nodes The node list.
-     * @param string $newName The new class name.
-     *
-     * @return void
+     * @param array<object> $nodes   the node list
+     * @param string        $newName the new class name
      */
     private function renameFirstClass(array $nodes, string $newName): void
     {
@@ -266,7 +248,7 @@ PHP);
                 return;
             }
 
-            if (property_exists($node, 'stmts') && is_array($node->stmts)) {
+            if ($node instanceof Namespace_) {
                 $this->renameFirstClass($node->stmts, $newName);
             }
         }

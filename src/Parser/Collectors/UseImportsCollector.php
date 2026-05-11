@@ -20,16 +20,16 @@ final class UseImportsCollector extends AbstractNodeTraverser
     {
         parent::__construct(new CollectUseImportsVisitor());
     }
+
     /**
      * Collects imports for the given AST nodes.
      *
      * @param Node[] $nodes
      *
-     * @return Node[] The traversed nodes.
+     * @return Node[] the traversed nodes
      */
     public function collect(array $nodes): array
     {
         return $this->traverse($nodes);
     }
-
 }

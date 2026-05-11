@@ -17,7 +17,6 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\Parser;
 use PhpParser\PrettyPrinter\Standard;
-use RuntimeException;
 
 /**
  * Provides functionality to parse files for userland classes, traits, or interfaces
@@ -28,16 +27,13 @@ final class UserLandParser implements ParserInterface
     private Parser $parser;
 
     /**
-     * @param AbstractNodeTraverser $locatorAttacher
-     * @param AbstractNodeTraverser $removeDoubleNopTraverser
-     * @param ReflectionFileLocator $locator
      * @param NopPrinter $printer
      */
     public function __construct(
         private readonly AbstractNodeTraverser $locatorAttacher = new NodeLocatorAttacher(),
         private readonly AbstractNodeTraverser $removeDoubleNopTraverser = new RemoveDoubleNopTraverser(),
         private readonly ReflectionFileLocator $locator = new ReflectionFileLocator(),
-        private readonly Standard              $printer = new NopPrinter()
+        private readonly Standard $printer = new NopPrinter(),
     ) {
         $this->parser = ParserFactory::getParser();
     }
@@ -45,7 +41,7 @@ final class UserLandParser implements ParserInterface
     /**
      * Parses a userland class/trait/interface file (Reflection-based).
      *
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function parseFqcn(string $fqcn): array
     {
@@ -54,9 +50,6 @@ final class UserLandParser implements ParserInterface
         return $this->parseFile($file);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function parseFile(string $filePath): array
     {
         $ast = $this->simpleParseFile($filePath);
@@ -64,49 +57,41 @@ final class UserLandParser implements ParserInterface
         return $this->processExtraVisitors($ast);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function simpleParseFile(string $filePath): array
     {
         $code = $this->locator->getContent($filePath);
         if (false === $code) {
-            throw new RuntimeException(sprintf('Unable to read file "%s".', $filePath));
+            throw new \RuntimeException(sprintf('Unable to read file "%s".', $filePath));
         }
 
         return $this->simpleParseCode($code, $filePath);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function parseCode(string $code, string $filePath = ''): array
     {
-        //return $this->parseFileCode($code);
+        // return $this->parseFileCode($code);
         $ast = $this->simpleParseCode($code);
 
         return $this->processExtraVisitors($ast);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function simpleParseCode(string $code, string $filePath = ''): array
     {
         try {
             $ast = $this->parser->parse($code);
         } catch (Error $e) {
             if (empty($filePath)) {
-                throw new RuntimeException(sprintf('Parse error : %s', $e->getMessage()), 0, $e);
+                throw new \RuntimeException(sprintf('Parse error : %s', $e->getMessage()), 0, $e);
             }
-            throw new RuntimeException(sprintf('Parse error for file "%s": %s', $filePath, $e->getMessage()), 0, $e);
+            throw new \RuntimeException(sprintf('Parse error for file "%s": %s', $filePath, $e->getMessage()), 0, $e);
         }
 
-        return $ast;
+        return $ast ?? [];
     }
 
     /**
      * @param Node[] $ast
+     *
      * @return Node[]
      *
      * TODO : move this to a dedicated class (already exists in NopPrinter)
@@ -120,6 +105,7 @@ final class UserLandParser implements ParserInterface
 
     /**
      * @param Node[] $ast
+     *
      * @return Node[]
      */
     public function processExtraVisitors(array $ast): array
@@ -132,18 +118,16 @@ final class UserLandParser implements ParserInterface
         $ast = $traverser->traverse($ast);
 
         return new UseImportsCollector()->collect($ast);
-
     }
 
     /**
      * @param class-string $fqcn
-     * @return string
      */
     private function locateFilePath(string $fqcn): string
     {
         $file = $this->locator->locate($fqcn);
         if (null === $file) {
-            throw new RuntimeException(sprintf('Unable to locate source file for "%s".', $fqcn));
+            throw new \RuntimeException(sprintf('Unable to locate source file for "%s".', $fqcn));
         }
 
         return $file;

@@ -17,6 +17,7 @@ class NopRefactorTraverser extends NopSpacingTraverser
 {
     /**
      * @param Node[] $nodes
+     *
      * @return Node[]
      */
     public function traverse(array $nodes): array

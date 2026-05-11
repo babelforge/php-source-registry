@@ -7,7 +7,7 @@ namespace PhpNoobs\PhpSource\Parser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Class AbstractAstUpdaterNodeVisitor
+ * Class AbstractAstUpdaterNodeVisitor.
  */
 abstract class AbstractNodeVisitor extends NodeVisitorAbstract
 {
@@ -16,7 +16,7 @@ abstract class AbstractNodeVisitor extends NodeVisitorAbstract
     /**
      * Indicates whether the AST was modified during traversal.
      *
-     * @return bool True when the AST was updated, false otherwise.
+     * @return bool true when the AST was updated, false otherwise
      */
     public function updatedAst(): bool
     {
@@ -27,5 +27,4 @@ abstract class AbstractNodeVisitor extends NodeVisitorAbstract
     {
         $this->updatedAst = true;
     }
-
 }

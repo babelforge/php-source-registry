@@ -31,7 +31,7 @@ final class CollectUseImportsVisitor extends AbstractNodeVisitor
     public const string IMPORTS_ATTRIBUTE_KEY = 'retype.imports.map';
 
     /**
-     * @var array<string, class-string>
+     * @var array<string, string>
      */
     private array $imports = [];
 
@@ -80,8 +80,8 @@ final class CollectUseImportsVisitor extends AbstractNodeVisitor
     /**
      * Collects imports from a list of UseUse entries.
      *
-     * @param list<UseItem> $uses The use entries.
-     * @param non-empty-string|null $prefix Optional group use prefix.
+     * @param array<UseItem> $uses   the use entries
+     * @param string|null    $prefix optional group use prefix
      */
     private function collectUseUses(array $uses, ?string $prefix): void
     {
@@ -98,15 +98,15 @@ final class CollectUseImportsVisitor extends AbstractNodeVisitor
      * - use Foo\Bar as Baz;     => alias Baz => Foo\Bar
      * - use Foo\{Bar, Baz as Q} => alias Bar => Foo\Bar, alias Q => Foo\Baz
      *
-     * @param UseItem $useUse The use entry.
-     * @param non-empty-string|null $prefix Optional group use prefix.
+     * @param UseItem     $useUse the use entry
+     * @param string|null $prefix optional group use prefix
      */
     private function collectUseUse(UseItem $useUse, ?string $prefix): void
     {
         $name = $useUse->name->toString();
 
         $fqcn = null !== $prefix && '' !== $prefix
-            ? $prefix . '\\' . $name
+            ? $prefix.'\\'.$name
             : $name;
 
         $alias = $this->inferAlias($useUse->alias, $fqcn);
@@ -116,17 +116,16 @@ final class CollectUseImportsVisitor extends AbstractNodeVisitor
             return;
         }
 
-        /** @var class-string $fqcn */
         $this->imports[$alias] = ltrim($fqcn, '\\');
     }
 
     /**
      * Infers the import alias.
      *
-     * @param Identifier|null $explicitAlias Explicit alias node (if provided).
-     * @param non-empty-string $fqcn The fully-qualified class name.
+     * @param Identifier|null $explicitAlias explicit alias node (if provided)
+     * @param string          $fqcn          the fully-qualified class name
      *
-     * @return non-empty-string The alias.
+     * @return string the alias
      */
     private function inferAlias(?Identifier $explicitAlias, string $fqcn): string
     {
@@ -142,9 +141,9 @@ final class CollectUseImportsVisitor extends AbstractNodeVisitor
     /**
      * Returns the last namespace segment for a FQCN.
      *
-     * @param non-empty-string $fqcn The fully-qualified class name.
+     * @param string $fqcn the fully-qualified class name
      *
-     * @return non-empty-string The last segment.
+     * @return string the last segment
      */
     private function lastSegment(string $fqcn): string
     {

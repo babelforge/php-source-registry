@@ -30,26 +30,15 @@ final class NopSpacingVisitor extends AbstractNodeVisitor
         return true;
     }
 
-    /**
-     * @param Node $node
-     *
-     * @return Node|null
-     */
     public function enterNode(Node $node): ?Node
     {
-        if (IsNode::namespace($node)) {
-            /**
-             * @var Namespace_ $node
-             */
+        if ($node instanceof Namespace_) {
             $node->stmts = $this->addSpacingInStmtList($node->stmts);
 
             return null;
         }
 
-        if (IsNode::classLike($node)) {
-            /**
-             * @var ClassLike $node
-             */
+        if ($node instanceof ClassLike) {
             $node->stmts = $this->addSpacingInClassLike($node->stmts);
 
             return null;
@@ -59,13 +48,14 @@ final class NopSpacingVisitor extends AbstractNodeVisitor
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param array<Stmt> $nodes
      *
-     * @return Stmt[]
+     * @return array<Stmt>
      */
     public function beforeTraverse(array $nodes): array
     {
         $this->markAstUpdated();
+
         return $this->addSpacingInStmtList($nodes);
     }
 
@@ -73,9 +63,9 @@ final class NopSpacingVisitor extends AbstractNodeVisitor
      * Adds spacing in a namespace/global statement list:
      * inserts a Nop between a use-block and the next non-use statement.
      *
-     * @param list<Stmt> $stmts
+     * @param array<Stmt> $stmts
      *
-     * @return list<Stmt>
+     * @return array<Stmt>
      */
     private function addSpacingInStmtList(array $stmts): array
     {
@@ -130,9 +120,9 @@ final class NopSpacingVisitor extends AbstractNodeVisitor
     /**
      * Adds spacing inside class-like bodies.
      *
-     * @param list<Stmt> $stmts
+     * @param array<Stmt>|null $stmts
      *
-     * @return list<Stmt>
+     * @return array<Stmt>
      */
     private function addSpacingInClassLike(?array $stmts): array
     {
@@ -169,27 +159,25 @@ final class NopSpacingVisitor extends AbstractNodeVisitor
 
     /**
      * @param Comment[] $comments
-     * @return Nop
      */
     private function newComment(array $comments): Nop
     {
         $nop = new Nop();
         $nop->setAttribute('comments', $comments);
+
         return $nop;
     }
 
     /**
      * Appends a single Nop unless the last statement is already a Nop.
      *
-     * @param list<Stmt> $out
-     *
-     * @return void
+     * @param array<Stmt> $out
      */
     private function appendSingleNop(array &$out): void
     {
         $last = $out[array_key_last($out)] ?? null;
 
-        if ((null !== $last) && IsNode::nop($last) && $last->getComments() === []) {
+        if ((null !== $last) && IsNode::nop($last) && [] === $last->getComments()) {
             // If it already contains a comment, it already yields spacing.
             return;
         }
@@ -200,10 +188,6 @@ final class NopSpacingVisitor extends AbstractNodeVisitor
         $out[] = $nop;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     private function hasStandaloneDocBlock(?Node $node): bool
     {
         if ((null === $node) || !IsNode::nop($node)) {

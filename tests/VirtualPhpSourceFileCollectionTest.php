@@ -17,8 +17,6 @@ final class VirtualPhpSourceFileCollectionTest extends TestCase
 {
     /**
      * Ensures files can be added, counted, iterated, and fetched by virtual path.
-     *
-     * @return void
      */
     public function testItStoresVirtualFilesByPath(): void
     {
@@ -37,8 +35,6 @@ final class VirtualPhpSourceFileCollectionTest extends TestCase
 
     /**
      * Ensures collections can be merged in insertion order.
-     *
-     * @return void
      */
     public function testItMergesCollections(): void
     {
@@ -54,8 +50,6 @@ final class VirtualPhpSourceFileCollectionTest extends TestCase
 
     /**
      * Ensures reboot clears the update flag and reparses the current nodes.
-     *
-     * @return void
      */
     public function testVirtualFileRebootClearsUpdateFlagAndReparsesNodes(): void
     {
@@ -83,10 +77,8 @@ final class VirtualPhpSourceFileCollectionTest extends TestCase
     /**
      * Checks whether a node list contains a class by name.
      *
-     * @param array<object> $nodes The node list.
-     * @param string $className The class name.
-     *
-     * @return bool
+     * @param array<object> $nodes     the node list
+     * @param string        $className the class name
      */
     private function containsClassNamed(array $nodes, string $className): bool
     {

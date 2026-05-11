@@ -13,7 +13,7 @@ use PhpParser\PrettyPrinter\Standard;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class PhpSourceFile
+ * Class PhpSourceFile.
  */
 final class PhpSourceFile
 {
@@ -27,16 +27,15 @@ final class PhpSourceFile
     public array $nodes = [];
 
     public function __construct(
-        public readonly string                         $path,
+        public readonly string $path,
         public readonly VirtualPhpSourceFileCollection $virtualFiles,
-        private readonly ?FileWriterInterface          $fileWriter = null,
-        private readonly ParserInterface               $parser = new UserLandParser(),
-        private readonly Standard                      $printer = new NopPrinter(),
-        private readonly Standard                      $standardPrinter = new Standard(),
+        private readonly ?FileWriterInterface $fileWriter = null,
+        private readonly ParserInterface $parser = new UserLandParser(),
+        private readonly Standard $printer = new NopPrinter(),
+        private readonly Standard $standardPrinter = new Standard(),
         private readonly VirtualPhpSourceFileAssembler $virtualFileAssembler = new VirtualPhpSourceFileAssembler(),
-        private readonly ?LoggerInterface              $logger = null,
-    )
-    {
+        private readonly ?LoggerInterface $logger = null,
+    ) {
         $this->originalNonTransformedNodes = $this->parser->simpleParseFile($path);
         $this->nodes = $this->parser->parseFile($path);
     }
@@ -47,7 +46,6 @@ final class PhpSourceFile
     }
 
     /**
-     * @param bool $reloadIfNotUpdated
      * @return Node[]
      */
     public function getAst(bool $reloadIfNotUpdated = false): array
@@ -68,9 +66,6 @@ final class PhpSourceFile
         return false;
     }
 
-    /**
-     * @return string
-     */
     public function save(): string
     {
         $this->log("Saving $this->path");
@@ -87,7 +82,6 @@ final class PhpSourceFile
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public function print(array $nodes): string
     {
@@ -96,7 +90,6 @@ final class PhpSourceFile
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public function standardPrint(array $nodes): string
     {

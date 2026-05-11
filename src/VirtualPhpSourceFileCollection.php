@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace PhpNoobs\PhpSource;
 
-use Countable;
-use IteratorAggregate;
-use Traversable;
-
 /**
- * Class VirtualPhpSourceFileCollection
+ * Class VirtualPhpSourceFileCollection.
  *
- * @implements IteratorAggregate<VirtualPhpSourceFile>
+ * @implements \IteratorAggregate<VirtualPhpSourceFile>
  */
-final class VirtualPhpSourceFileCollection implements IteratorAggregate, Countable
+final class VirtualPhpSourceFileCollection implements \IteratorAggregate, \Countable
 {
     /**
      * @var VirtualPhpSourceFile[]
@@ -51,17 +47,11 @@ final class VirtualPhpSourceFileCollection implements IteratorAggregate, Countab
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getIterator(): Traversable
+    public function getIterator(): \Traversable
     {
         yield from $this->files;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function count(): int
     {
         return count($this->files);

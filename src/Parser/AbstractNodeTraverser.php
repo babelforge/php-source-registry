@@ -9,7 +9,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Class AbstractTraverser
+ * Class AbstractTraverser.
  */
 abstract class AbstractNodeTraverser
 {
@@ -18,6 +18,7 @@ abstract class AbstractNodeTraverser
      * @var AbstractNodeVisitor[]
      */
     private array $builtInVisitors;
+
     public function __construct(AbstractNodeVisitor ...$builtInVisitors)
     {
         $this->builtInVisitors = $builtInVisitors;
@@ -26,6 +27,7 @@ abstract class AbstractNodeTraverser
 
     /**
      * @param Node[] $nodes
+     *
      * @return Node[]
      */
     public function traverse(array $nodes): array
@@ -35,10 +37,6 @@ abstract class AbstractNodeTraverser
         return $this->traverser->traverse($nodes);
     }
 
-    /**
-     * @param Node $node
-     * @return ?Node
-     */
     public function traverseNode(Node $node): ?Node
     {
         return $this->traverse([$node])[0];
@@ -46,6 +44,7 @@ abstract class AbstractNodeTraverser
 
     /**
      * @param Node[] $nodes
+     *
      * @return Node[]
      */
     public function attach(array $nodes): array

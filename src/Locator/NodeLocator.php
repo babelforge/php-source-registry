@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhpNoobs\PhpSource\Locator;
 
-use JsonException;
-
 /**
  * Represents a stable, semantic locator for an AST node.
  *
@@ -17,24 +15,24 @@ final class NodeLocator
     public string $namespace;
 
     public function __construct(
-        public bool   $isNull = false,
-        public bool   $isFqcn = false,
-        public bool   $isClassLike = false,
-        public bool   $isFunctionLike = false,
-        public bool   $isMethodLike = false,
-        public bool   $isClosureLike = false,
-        public bool   $isArrowFunctionLike = false,
-        public bool   $isPropertyLike = false,
-        public bool   $isParamLike = false,
-        public ?self  $parent = null,
-        ?string       $namespace = null,
+        public bool $isNull = false,
+        public bool $isFqcn = false,
+        public bool $isClassLike = false,
+        public bool $isFunctionLike = false,
+        public bool $isMethodLike = false,
+        public bool $isClosureLike = false,
+        public bool $isArrowFunctionLike = false,
+        public bool $isPropertyLike = false,
+        public bool $isParamLike = false,
+        public ?self $parent = null,
+        ?string $namespace = null,
         public string $className = '',
         public string $functionName = '',
         public string $methodName = '',
         public string $propertyName = '',
         public string $parentScope = '',
-        public int    $index = 0,
-        public int    $newLine = 0
+        public int $index = 0,
+        public int $newLine = 0,
     ) {
         $namespace ??= '';
         $this->namespace = $namespace;
@@ -51,13 +49,14 @@ final class NodeLocator
             return false;
         }
 
-        if ((null !== $this->parent) && !$this->parent->equals($other->parent)) {
+        if (null !== $this->parent && null !== $other->parent && !$this->parent->equals($other->parent)) {
             return false;
         }
 
-        $found =  array_all(self::checkedProps(), function ($prop) use ($other) {
+        $found = array_all(self::checkedProps(), function ($prop) use ($other) {
             $a = $this->$prop;
             $b = $other->$prop;
+
             return $a === $b;
         });
 
@@ -78,34 +77,60 @@ final class NodeLocator
             'parentScope', 'index'];
     }
 
-    /**
-     * @return string
-     */
     public function toString(): string
     {
         try {
             return json_encode($this, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
+        } catch (\JsonException) {
             return '{}';
         }
     }
 
-    /**
-     * @param string $locator
-     * @return self
-     */
     public static function fromString(string $locator): self
     {
         try {
             $obj = json_decode($locator, true, 512, JSON_THROW_ON_ERROR);
-            if (isset($obj['parent'])) {
-                $obj['parent'] = self::fromString(new self(...$obj['parent'])->toString());
+            if (!is_array($obj)) {
+                return self::null();
             }
-            return new self(...$obj);
-        } catch (JsonException) {
+
+            if (isset($obj['parent']) && is_array($obj['parent'])) {
+                $obj['parent'] = self::fromArray($obj['parent']);
+            }
+
+            return self::fromArray($obj);
+        } catch (\JsonException) {
             return self::null();
         }
+    }
 
+    /**
+     * Build a locator from decoded JSON data.
+     *
+     * @param array<mixed> $data the decoded locator data
+     */
+    private static function fromArray(array $data): self
+    {
+        return new self(
+            isNull: true === ($data['isNull'] ?? false),
+            isFqcn: true === ($data['isFqcn'] ?? false),
+            isClassLike: true === ($data['isClassLike'] ?? false),
+            isFunctionLike: true === ($data['isFunctionLike'] ?? false),
+            isMethodLike: true === ($data['isMethodLike'] ?? false),
+            isClosureLike: true === ($data['isClosureLike'] ?? false),
+            isArrowFunctionLike: true === ($data['isArrowFunctionLike'] ?? false),
+            isPropertyLike: true === ($data['isPropertyLike'] ?? false),
+            isParamLike: true === ($data['isParamLike'] ?? false),
+            parent: ($data['parent'] ?? null) instanceof self ? $data['parent'] : null,
+            namespace: is_string($data['namespace'] ?? null) ? $data['namespace'] : null,
+            className: is_string($data['className'] ?? null) ? $data['className'] : '',
+            functionName: is_string($data['functionName'] ?? null) ? $data['functionName'] : '',
+            methodName: is_string($data['methodName'] ?? null) ? $data['methodName'] : '',
+            propertyName: is_string($data['propertyName'] ?? null) ? $data['propertyName'] : '',
+            parentScope: is_string($data['parentScope'] ?? null) ? $data['parentScope'] : '',
+            index: is_int($data['index'] ?? null) ? $data['index'] : 0,
+            newLine: is_int($data['newLine'] ?? null) ? $data['newLine'] : 0,
+        );
     }
 
     public function isNull(): bool
@@ -126,7 +151,6 @@ final class NodeLocator
     {
         return new self(isFqcn: true, namespace: $namespace, className: $className);
     }
-
 
     public static function classLike(?string $namespace, string $className): self
     {

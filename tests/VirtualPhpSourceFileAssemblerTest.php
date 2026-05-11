@@ -9,6 +9,7 @@ use PhpNoobs\PhpSource\VirtualPhpSourceFileAssembler;
 use PhpNoobs\PhpSource\VirtualPhpSourceFileProducer;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\PrettyPrinter\Standard;
 use PHPUnit\Framework\TestCase;
 
@@ -19,28 +20,26 @@ final class VirtualPhpSourceFileAssemblerTest extends TestCase
 {
     /**
      * Ensures split virtual files can be assembled back into one file without duplicate imports.
-     *
-     * @return void
      */
     public function testItAssemblesVirtualFilesWithoutDuplicateImports(): void
     {
         $nodes = new UserLandParser()->simpleParseCode(<<<'PHP'
-<?php
+            <?php
 
-declare(strict_types=1);
+            declare(strict_types=1);
 
-namespace App;
+            namespace App;
 
-use DateTimeImmutable;
+            use DateTimeImmutable;
 
-final class First
-{
-}
+            final class First
+            {
+            }
 
-final class Second
-{
-}
-PHP, '/project/src/Example.php');
+            final class Second
+            {
+            }
+            PHP, '/project/src/Example.php');
 
         $virtualFiles = new VirtualPhpSourceFileProducer()->produceVirtualPhpSourceFiles('/project/src/Example.php', $nodes);
         $assembledNodes = new VirtualPhpSourceFileAssembler()->assemble($virtualFiles);
@@ -54,26 +53,24 @@ PHP, '/project/src/Example.php');
 
     /**
      * Ensures declare statements are kept only once when several virtual files contain them.
-     *
-     * @return void
      */
     public function testItKeepsDeclareStatementOnlyOnce(): void
     {
         $nodes = new UserLandParser()->simpleParseCode(<<<'PHP'
-<?php
+            <?php
 
-declare(strict_types=1);
+            declare(strict_types=1);
 
-namespace App;
+            namespace App;
 
-final class First
-{
-}
+            final class First
+            {
+            }
 
-final class Second
-{
-}
-PHP, '/project/src/DeclareExample.php');
+            final class Second
+            {
+            }
+            PHP, '/project/src/DeclareExample.php');
 
         $virtualFiles = new VirtualPhpSourceFileProducer()->produceVirtualPhpSourceFiles('/project/src/DeclareExample.php', $nodes);
         $code = new Standard()->prettyPrintFile(new VirtualPhpSourceFileAssembler()->assemble($virtualFiles));
@@ -83,29 +80,27 @@ PHP, '/project/src/DeclareExample.php');
 
     /**
      * Ensures use statement variants are deduplicated by type, name, and alias.
-     *
-     * @return void
      */
     public function testItDeduplicatesUseVariantsWithoutMergingDifferentImports(): void
     {
         $nodes = new UserLandParser()->simpleParseCode(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-use DateTimeImmutable;
-use DateTimeImmutable as Clock;
-use function count;
-use const PHP_VERSION;
+            use DateTimeImmutable;
+            use DateTimeImmutable as Clock;
+            use function count;
+            use const PHP_VERSION;
 
-final class First
-{
-}
+            final class First
+            {
+            }
 
-final class Second
-{
-}
-PHP, '/project/src/UseVariants.php');
+            final class Second
+            {
+            }
+            PHP, '/project/src/UseVariants.php');
 
         $virtualFiles = new VirtualPhpSourceFileProducer()->produceVirtualPhpSourceFiles('/project/src/UseVariants.php', $nodes);
         $code = new Standard()->prettyPrintFile(new VirtualPhpSourceFileAssembler()->assemble($virtualFiles));
@@ -118,20 +113,18 @@ PHP, '/project/src/UseVariants.php');
 
     /**
      * Ensures original-node mode ignores in-memory virtual file updates.
-     *
-     * @return void
      */
     public function testItCanAssembleFromOriginalNodes(): void
     {
         $nodes = new UserLandParser()->simpleParseCode(<<<'PHP'
-<?php
+            <?php
 
-namespace App;
+            namespace App;
 
-final class OriginalName
-{
-}
-PHP, '/project/src/OriginalMode.php');
+            final class OriginalName
+            {
+            }
+            PHP, '/project/src/OriginalMode.php');
 
         $virtualFiles = new VirtualPhpSourceFileProducer()->produceVirtualPhpSourceFiles('/project/src/OriginalMode.php', $nodes);
         $virtualFile = $virtualFiles->get(0);
@@ -154,24 +147,22 @@ PHP, '/project/src/OriginalMode.php');
 
     /**
      * Ensures global-scope virtual files can be reassembled with imports and declarations.
-     *
-     * @return void
      */
     public function testItAssemblesGlobalScopeVirtualFiles(): void
     {
         $nodes = new UserLandParser()->simpleParseCode(<<<'PHP'
-<?php
+            <?php
 
-use DateTimeImmutable;
+            use DateTimeImmutable;
 
-final class First
-{
-}
+            final class First
+            {
+            }
 
-final class Second
-{
-}
-PHP, '/project/src/GlobalScope.php');
+            final class Second
+            {
+            }
+            PHP, '/project/src/GlobalScope.php');
 
         $virtualFiles = new VirtualPhpSourceFileProducer()->produceVirtualPhpSourceFiles('/project/src/GlobalScope.php', $nodes);
         $code = new Standard()->prettyPrintFile(new VirtualPhpSourceFileAssembler()->assemble($virtualFiles));
@@ -184,10 +175,8 @@ PHP, '/project/src/GlobalScope.php');
     /**
      * Renames the first class found in a node list.
      *
-     * @param array<object> $nodes The node list.
-     * @param string $newName The new class name.
-     *
-     * @return void
+     * @param array<object> $nodes   the node list
+     * @param string        $newName the new class name
      */
     private function renameFirstClass(array $nodes, string $newName): void
     {
@@ -198,7 +187,7 @@ PHP, '/project/src/GlobalScope.php');
                 return;
             }
 
-            if (property_exists($node, 'stmts') && is_array($node->stmts)) {
+            if ($node instanceof Namespace_) {
                 $this->renameFirstClass($node->stmts, $newName);
             }
         }

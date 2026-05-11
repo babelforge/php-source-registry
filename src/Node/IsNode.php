@@ -48,68 +48,39 @@ use PhpParser\Node\UnionType;
 
 /**
  * @param Node|null $node
+ *
  * @return bool
  */
 class IsNode
 {
-    /**
-     * @param Node|null $stmt
-     *
-     * @return bool
-     */
     public static function null(?Node $stmt): bool
     {
         return null === $stmt;
     }
 
-    /**
-     * @param Node|null $stmt
-     *
-     * @return bool
-     */
     public static function node(?Node $stmt): bool
     {
         return $stmt instanceof Node;
     }
 
-    /**
-     * @param Node|null $stmt
-     *
-     * @return bool
-     */
     public static function identifier(?Node $stmt): bool
     {
         return $stmt instanceof Identifier;
     }
 
-    /**
-     * @param Node|null $stmt
-     *
-     * @return bool
-     */
     public static function precedence(?Node $stmt): bool
     {
         return $stmt instanceof Precedence;
     }
 
-    /**
-     * @param Node|null $node
-     *
-     * @return bool
-     */
     public static function nop(?Node $node): bool
     {
         return $node instanceof Nop;
     }
 
-    /**
-     * @param Node|null $node
-     *
-     * @return bool
-     */
     public static function use(?Node $node): bool
     {
-        return $node instanceof Use_ ;
+        return $node instanceof Use_;
     }
 
     public static function normalUse(?Node $node): bool
@@ -117,50 +88,26 @@ class IsNode
         return $node instanceof Use_ && Use_::TYPE_NORMAL === $node->type;
     }
 
-    /**
-     * @param Node|null $node
-     *
-     * @return bool
-     */
     public static function groupUse(?Node $node): bool
     {
-        return $node instanceof GroupUse ;
+        return $node instanceof GroupUse;
     }
 
-    /**
-     * @param Node|null $node
-     *
-     * @return bool
-     */
     public static function normalGroupUse(?Node $node): bool
     {
         return $node instanceof GroupUse && Use_::TYPE_NORMAL === $node->type;
     }
 
-    /**
-     * @param Node|null $node
-     *
-     * @return bool
-     */
     public static function useOrGroupUse(?Node $node): bool
     {
         return self::use($node) || self::groupUse($node);
     }
 
-    /**
-     * @param Node|null $stmt
-     *
-     * @return bool
-     */
     public static function declare(?Node $stmt): bool
     {
         return $stmt instanceof Declare_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function trait(?Node $node): bool
     {
         return $node instanceof Trait_;
@@ -171,109 +118,61 @@ class IsNode
         return $node instanceof TraitUse;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function enum(?Node $node): bool
     {
         return $node instanceof Enum_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function const(?Node $node): bool
     {
         return $node instanceof Const_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function classConstant(?Node $node): bool
     {
         return $node instanceof ClassConst;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function constOrClassConstant(?Node $node): bool
     {
         return self::const($node) || self::classConstant($node);
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function function(?Node $node): bool
     {
         return $node instanceof StmtFunction;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function closure(?Node $node): bool
     {
         return $node instanceof Closure;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function arrowFunction(?Node $node): bool
     {
         return $node instanceof ArrowFunction;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function classMethod(?Node $node): bool
     {
         return $node instanceof ClassMethod;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function functionOrClassMethod(?Node $node): bool
     {
         return self::function($node) || self::classMethod($node);
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function namespace(?Node $node): bool
     {
         return $node instanceof Namespace_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function class(?Node $node): bool
     {
         return $node instanceof Class_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function classLike(?Node $node): bool
     {
         return $node instanceof ClassLike;
@@ -281,10 +180,6 @@ class IsNode
 
     /**
      * Recognizes statements that act as class members.
-     *
-     * @param Node|null $node
-     *
-     * @return bool
      */
     public static function classMemberStmt(?Node $node): bool
     {
@@ -298,11 +193,6 @@ class IsNode
             || self::classMethod($node);
     }
 
-    /**
-     * @param Node|null $node
-     *
-     * @return bool
-     */
     public static function classLikeOrFunctionOrConst(?Node $node): bool
     {
         if (null === $node) {
@@ -317,217 +207,121 @@ class IsNode
             || self::const($node);
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function interface(?Node $node): bool
     {
         return $node instanceof Interface_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function property(?Node $node): bool
     {
         return $node instanceof Property;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function param(?Node $node): bool
     {
         return $node instanceof Param;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function name(?Node $node): bool
     {
         return $node instanceof Name;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function relative(?Node $node): bool
     {
         return $node instanceof Name\Relative;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function string(?Node $node): bool
     {
         return $node instanceof String_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function int(?Node $node): bool
     {
         return $node instanceof Int_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function float(?Node $node): bool
     {
         return $node instanceof Float_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function expressionConstFetch(?Node $node): bool
     {
         return $node instanceof ConstFetch;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function expressionArray(?Node $node): bool
     {
         return $node instanceof Array_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function classConstFetch(?Node $node): bool
     {
         return $node instanceof ClassConstFetch;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function magicConst(?Node $node): bool
     {
         return $node instanceof MagicConst;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function complexType(?Node $node): bool
     {
         return $node instanceof ComplexType;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function nullableType(?Node $node): bool
     {
         return $node instanceof NullableType;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function unionType(?Node $node): bool
     {
         return $node instanceof UnionType;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function intersectionType(?Node $node): bool
     {
         return $node instanceof IntersectionType;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function new(?Node $node): bool
     {
         return $node instanceof New_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function catch(?Node $node): bool
     {
         return $node instanceof Catch_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function instanceof(?Node $node): bool
     {
         return $node instanceof Instanceof_;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function staticCall(?Node $node): bool
     {
         return $node instanceof StaticCall;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function staticPropertyFetch(?Node $node): bool
     {
         return $node instanceof StaticPropertyFetch;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function attribute(?Node $node): bool
     {
         return $node instanceof Attribute;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function alias(?Node $node): bool
     {
         return $node instanceof Alias;
     }
 
-    /**
-     * @param Node|null $node
-     * @return bool
-     */
     public static function documentableStmt(?Node $node): bool
     {
         return self::class($node)

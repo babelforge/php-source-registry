@@ -1,0 +1,11 @@
+includes:
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    level: max
+    paths:
+        - src
+        - tests
+
+    tmpDir: var/cache/phpstan
+    treatPhpDocTypesAsCertain: false

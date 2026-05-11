@@ -11,10 +11,9 @@ use PhpNoobs\PhpSource\Printer\NopPrinter;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 /**
- * Class PhpSourceRegistryInstance
+ * Class PhpSourceRegistryInstance.
  */
 class PhpSourceRegistryInstance
 {
@@ -36,8 +35,7 @@ class PhpSourceRegistryInstance
     public function __construct(
         protected ?FileWriterInterface $fileWriter = null,
         protected ?LoggerInterface $logger = null,
-    )
-    {
+    ) {
         $this->parser = new UserLandParser();
         $this->printer = new NopPrinter();
         $this->standardPrinter = new Standard();
@@ -49,11 +47,8 @@ class PhpSourceRegistryInstance
         );
     }
 
-
     /**
-     * @param string $virtualFilePath
      * @param Node[] $nodes
-     * @return void
      */
     public function updateVirtualFileAst(string $virtualFilePath, array $nodes): void
     {
@@ -67,7 +62,6 @@ class PhpSourceRegistryInstance
         $virtualFile->update($nodes);
     }
 
-
     public function hasFile(string $filePath): bool
     {
         return array_any($this->files, fn ($file) => $file->path === $filePath);
@@ -78,10 +72,6 @@ class PhpSourceRegistryInstance
         return array_find($this->files, fn ($file) => $file->path === $filePath);
     }
 
-    /**
-     * @param string $filePath
-     * @return VirtualPhpSourceFileCollection
-     */
     public function getVirtualFiles(string $filePath): VirtualPhpSourceFileCollection
     {
         if (null === $file = $this->getFile($filePath)) {
@@ -135,7 +125,7 @@ class PhpSourceRegistryInstance
         }
 
         if (null === $file) {
-            throw new RuntimeException("File $filePath not found");
+            throw new \RuntimeException("File $filePath not found");
         }
 
         return $file->getAst($reloadIfNotUpdated);
@@ -149,7 +139,7 @@ class PhpSourceRegistryInstance
             }
         }
 
-        throw new RuntimeException("Virtual file $virtualFilePath not found");
+        throw new \RuntimeException("Virtual file $virtualFilePath not found");
     }
 
     /**
@@ -160,11 +150,10 @@ class PhpSourceRegistryInstance
         return $this->getVirtualFile($virtualFilePath)->getAst();
     }
 
-
     public function save(): void
     {
         $this->log(str_repeat('=', 100));
-        $this->log("Saving files");
+        $this->log('Saving files');
         foreach ($this->files as $file) {
             if (!$file->isUpdated()) {
                 continue;
@@ -199,10 +188,7 @@ class PhpSourceRegistryInstance
         return $this->standardPrint($ast);
     }
 
-
     /**
-     * @param ParserInterface $parser
-     * @return void
      * @api
      */
     public function setParser(ParserInterface $parser): void
@@ -211,8 +197,6 @@ class PhpSourceRegistryInstance
     }
 
     /**
-     * @param Standard $printer
-     * @return void
      * @api
      */
     public function setPrinter(Standard $printer): void
@@ -222,7 +206,6 @@ class PhpSourceRegistryInstance
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public function print(array $nodes): string
     {
@@ -231,7 +214,6 @@ class PhpSourceRegistryInstance
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public function standardPrint(array $nodes): string
     {

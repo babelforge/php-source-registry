@@ -12,13 +12,12 @@ use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Token;
 
 /**
- * Standard printer that moves FQCNs to use imports, adds spaces between blocks and removes double lines
+ * Standard printer that moves FQCNs to use imports, adds spaces between blocks and removes double lines.
  */
 class NopPrinter extends Standard
 {
     /**
      * @param Node[] $stmts
-     * @return string
      */
     public function prettyPrintFile(array $stmts): string
     {
@@ -29,7 +28,6 @@ class NopPrinter extends Standard
 
     /**
      * @param Node[] $stmts
-     * @return string
      */
     public function prettyPrint(array $stmts): string
     {
@@ -38,12 +36,10 @@ class NopPrinter extends Standard
         );
     }
 
-
     /**
-     * @param Node[] $stmts
-     * @param Node[] $origStmts
+     * @param Node[]  $stmts
+     * @param Node[]  $origStmts
      * @param Token[] $origTokens
-     * @return string
      */
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens): string
     {
@@ -56,11 +52,12 @@ class NopPrinter extends Standard
 
     /**
      * @param Node[] $stmts
+     *
      * @return Node[]
      */
     private static function prepare(array $stmts): array
     {
         return new ReadyToPrintTraverser()->traverse($stmts);
-        //return new NopRefactorTraverser()->traverse($stmts);
+        // return new NopRefactorTraverser()->traverse($stmts);
     }
 }

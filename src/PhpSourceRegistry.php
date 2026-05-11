@@ -10,7 +10,7 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 
 /**
- * Class PhpSourceRegistry
+ * Class PhpSourceRegistry.
  */
 final class PhpSourceRegistry
 {
@@ -38,9 +38,7 @@ final class PhpSourceRegistry
     }
 
     /**
-     * @param string $filePath
      * @param Node[] $nodes
-     * @return void
      */
     public static function updateVirtualFileAst(string $filePath, array $nodes): void
     {
@@ -48,7 +46,6 @@ final class PhpSourceRegistry
     }
 
     /**
-     * @param string $virtualFilePath
      * @return Node[]
      */
     public static function getVirtualFileAst(string $virtualFilePath): array
@@ -56,18 +53,11 @@ final class PhpSourceRegistry
         return self::new()->getVirtualFileAst($virtualFilePath);
     }
 
-    /**
-     * @param string $filePath
-     * @return VirtualPhpSourceFileCollection
-     */
     public static function getVirtualFiles(string $filePath): VirtualPhpSourceFileCollection
     {
         return self::new()->getVirtualFiles($filePath);
     }
 
-    /**
-     * @return VirtualPhpSourceFileCollection
-     */
     public static function getAllVirtualFiles(): VirtualPhpSourceFileCollection
     {
         return self::new()->getAllVirtualFiles();
@@ -94,8 +84,6 @@ final class PhpSourceRegistry
     }
 
     /**
-     * @param ParserInterface $parser
-     * @return void
      * @api
      */
     public static function setParser(ParserInterface $parser): void
@@ -104,8 +92,6 @@ final class PhpSourceRegistry
     }
 
     /**
-     * @param Standard $printer
-     * @return void
      * @api
      */
     public static function setPrinter(Standard $printer): void
@@ -115,7 +101,6 @@ final class PhpSourceRegistry
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public static function print(array $nodes): string
     {
@@ -124,7 +109,6 @@ final class PhpSourceRegistry
 
     /**
      * @param Node[] $nodes
-     * @return string
      */
     public static function standardPrint(array $nodes): string
     {

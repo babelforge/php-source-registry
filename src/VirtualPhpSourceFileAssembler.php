@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 
 /**
- * Class VirtualPhpSourceFileAssembler
+ * Class VirtualPhpSourceFileAssembler.
  *
  * Rebuilds a single AST file from a collection of VirtualPhpSourceFile.
  */
@@ -20,9 +20,10 @@ final class VirtualPhpSourceFileAssembler
     /**
      * Rebuilds a single AST file from virtual registry files.
      *
-     * @param VirtualPhpSourceFileCollection $virtualFiles The virtual files to assemble.
-     * @param bool $useOriginalNodes Whether original non-transformed nodes should be used.
-     * @return Node[] The rebuilt file AST.
+     * @param VirtualPhpSourceFileCollection $virtualFiles     the virtual files to assemble
+     * @param bool                           $useOriginalNodes whether original non-transformed nodes should be used
+     *
+     * @return Node[] the rebuilt file AST
      */
     public function assemble(VirtualPhpSourceFileCollection $virtualFiles, bool $useOriginalNodes = false): array
     {
@@ -54,7 +55,7 @@ final class VirtualPhpSourceFileAssembler
                     }
 
                     foreach ($node->stmts as $statement) {
-                        if ($statement instanceof Stmt\Use_) {
+                        if ($statement instanceof Use_) {
                             $namespaces[$namespaceName]['uses'][] = $statement;
 
                             continue;
@@ -66,8 +67,9 @@ final class VirtualPhpSourceFileAssembler
                     continue;
                 }
 
-                /** @var Stmt $node */
-                $globalStatements[] = $node;
+                if ($node instanceof Stmt) {
+                    $globalStatements[] = $node;
+                }
             }
         }
 
@@ -109,8 +111,9 @@ final class VirtualPhpSourceFileAssembler
     /**
      * Deduplicates use statements extracted from a raw statement list.
      *
-     * @param Stmt[] $statements The statements to inspect.
-     * @return Use_[] The deduplicated use statements.
+     * @param Stmt[] $statements the statements to inspect
+     *
+     * @return Use_[] the deduplicated use statements
      */
     private function deduplicateUsesFromStatements(array $statements): array
     {
@@ -128,15 +131,16 @@ final class VirtualPhpSourceFileAssembler
     /**
      * Removes use statements from a raw statement list.
      *
-     * @param Stmt[] $statements The statements to filter.
-     * @return Stmt[] The statements without use declarations.
+     * @param Stmt[] $statements the statements to filter
+     *
+     * @return Stmt[] the statements without use declarations
      */
     private function removeUsesFromStatements(array $statements): array
     {
         $result = [];
 
         foreach ($statements as $statement) {
-            if ($statement instanceof Stmt\Use_) {
+            if ($statement instanceof Use_) {
                 continue;
             }
 
@@ -153,8 +157,9 @@ final class VirtualPhpSourceFileAssembler
      * even if they target symbols declared elsewhere in the reassembled result.
      * This is required because all virtual files originate from the same split source file.
      *
-     * @param Stmt\Use_[] $uses The imports to deduplicate.
-     * @return Stmt\Use_[] The deduplicated imports.
+     * @param Use_[] $uses the imports to deduplicate
+     *
+     * @return Use_[] the deduplicated imports
      */
     private function deduplicateUses(array $uses): array
     {
@@ -176,7 +181,7 @@ final class VirtualPhpSourceFileAssembler
             }
 
             if ([] !== $keptUseItems) {
-                $result[] = new Stmt\Use_($keptUseItems, $use->type, $use->getAttributes());
+                $result[] = new Use_($keptUseItems, $use->type, $use->getAttributes());
             }
         }
 
@@ -191,16 +196,17 @@ final class VirtualPhpSourceFileAssembler
      * - the imported fully-qualified name
      * - the explicit alias when present
      *
-     * @param Stmt\Use_ $use The parent use statement.
-     * @param Node\UseItem $useItem The imported item.
-     * @return string The deduplication key.
+     * @param Use_         $use     the parent use statement
+     * @param Node\UseItem $useItem the imported item
+     *
+     * @return string the deduplication key
      */
-    private function buildUseDeduplicationKey(Stmt\Use_ $use, Node\UseItem $useItem): string
+    private function buildUseDeduplicationKey(Use_ $use, Node\UseItem $useItem): string
     {
         return $use->type
-            . '|'
-            . $useItem->name->toString()
-            . '|'
-            . ($useItem->alias?->toString() ?? '');
+            .'|'
+            .$useItem->name->toString()
+            .'|'
+            .($useItem->alias?->toString() ?? '');
     }
 }

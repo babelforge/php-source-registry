@@ -7,13 +7,10 @@ namespace PhpNoobs\PhpSource\Parser\Traversers;
 use PhpNoobs\PhpSource\Parser\Traversers\Visitors\ImportFullyQualifiedNameVisitor;
 
 /**
- * Class ReadyToPrintTraverser
+ * Class ReadyToPrintTraverser.
  */
 final class ReadyToPrintTraverser extends NopRefactorTraverser
 {
-    /**
-     * @inheritDoc
-     */
     protected function getVisitors(): array
     {
         return array_merge(parent::getVisitors(), [new ImportFullyQualifiedNameVisitor()]);

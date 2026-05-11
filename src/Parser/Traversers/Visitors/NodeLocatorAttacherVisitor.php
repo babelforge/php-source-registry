@@ -23,9 +23,6 @@ use PhpParser\Node\Stmt\Property;
  */
 final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
 {
-    /**
-     * @var string|null
-     */
     private ?string $currentNamespace = null;
 
     /**
@@ -40,12 +37,12 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
     private array $scopeStack = [];
 
     /**
-     * @var array<string, int> Counts for closures/arrows within a given scope locator.
+     * @var array<string, int> counts for closures/arrows within a given scope locator
      */
     private array $closureCounters = [];
 
     /**
-     * @var array<string, int> Counts for arrows within a given scope locator.
+     * @var array<string, int> counts for arrows within a given scope locator
      */
     private array $arrowCounters = [];
 
@@ -54,9 +51,6 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
         $this->currentClassLikeFqcn = NodeLocator::null();
     }
 
-    /**
-     * @inheritDoc
-     */
     public function enterNode(Node $node): ?Node
     {
         if ($node instanceof Namespace_) {
@@ -88,7 +82,7 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
 
         if ($node instanceof ClassMethod) {
             $methodLocator = $this->buildMethodLocator($node);
-            //$node->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $methodLocator);
+            // $node->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $methodLocator);
             $this->setAttribute($node, $methodLocator);
 
             $this->pushScope($methodLocator);
@@ -102,9 +96,9 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
             $parentScope = $this->currentScopeOrFileFallback();
             $idx = $this->nextClosureIndex($parentScope);
             $closureLocator = NodeLocator::closureLike($parentScope, $idx);
-            //$closureLocator = $parentScope . '#closure(' . $idx . ')';
+            // $closureLocator = $parentScope . '#closure(' . $idx . ')';
 
-            //$node->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $closureLocator);
+            // $node->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $closureLocator);
             $this->setAttribute($node, $closureLocator);
 
             $this->pushScope($closureLocator);
@@ -118,9 +112,9 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
             $parentScope = $this->currentScopeOrFileFallback();
             $idx = $this->nextArrowIndex($parentScope);
             $arrowLocator = NodeLocator::ArrowFunctionLike($parentScope, $idx);
-            //$arrowLocator = $parentScope . '#arrow(' . $idx . ')';
+            // $arrowLocator = $parentScope . '#arrow(' . $idx . ')';
 
-            //$node->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $arrowLocator);
+            // $node->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $arrowLocator);
             $this->setAttribute($node, $arrowLocator);
 
             $this->pushScope($arrowLocator);
@@ -139,18 +133,11 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
         return null;
     }
 
-    /**
-     * @param Node $node
-     * @param NodeLocator $locator
-     */
     private function setAttribute(Node $node, NodeLocator $locator): void
     {
         $node->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $locator->toString());
     }
 
-    /**
-     * @inheritDoc
-     */
     public function leaveNode(Node $node): ?Node
     {
         if ($node instanceof StmtFunction || $node instanceof ClassMethod || $node instanceof Closure || $node instanceof ArrowFunction) {
@@ -166,10 +153,6 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
 
     /**
      * Build FQCN for class-like nodes (Class_/Interface_/Trait_/Enum).
-     *
-     * @param ClassLike $classLike
-     *
-     * @return NodeLocator
      */
     private function buildClassLikeFqcn(ClassLike $classLike): NodeLocator
     {
@@ -180,15 +163,10 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
         $short = $classLike->name->toString();
 
         return NodeLocator::classLike($this->currentNamespace, $short);
-
     }
 
     /**
      * Build locator for a named function.
-     *
-     * @param StmtFunction $function
-     *
-     * @return NodeLocator
      */
     private function buildFunctionLocator(StmtFunction $function): NodeLocator
     {
@@ -199,10 +177,6 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
 
     /**
      * Build locator for a class method.
-     *
-     * @param ClassMethod $method
-     *
-     * @return NodeLocator
      */
     private function buildMethodLocator(ClassMethod $method): NodeLocator
     {
@@ -214,16 +188,13 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
     /**
      * Attach locators to params using their position in the signature (stable).
      *
-     * @param list<Param> $params
-     * @param NodeLocator $scopeLocator
-     *
-     * @return void
+     * @param array<Param> $params
      */
     private function attachParamsLocators(array $params, NodeLocator $scopeLocator): void
     {
         foreach ($params as $i => $param) {
             $paramLocator = NodeLocator::paramLike($scopeLocator, $i);
-            //$paramLocator = $scopeLocator . '#param(' . $i . ')';
+            // $paramLocator = $scopeLocator . '#param(' . $i . ')';
             $this->setAttribute($param, $paramLocator);
 
             // Optional: also attach to the variable itself (Expr\Variable) for convenience.
@@ -235,10 +206,6 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
      * Attach locators to properties (each declared property name).
      *
      * Handles: public int $a, $b;
-     *
-     * @param Property $property
-     *
-     * @return void
      */
     private function attachPropertyLocators(Property $property): void
     {
@@ -249,19 +216,15 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
         foreach ($property->props as $prop) {
             $name = $prop->name->toString();
             $locator = NodeLocator::propertyLike($this->currentClassLikeFqcn, $name);
-            //$locator = $this->currentClassLikeFqcn . '::$' . $name;
+            // $locator = $this->currentClassLikeFqcn . '::$' . $name;
 
-            //$prop->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $locator);
+            // $prop->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $locator);
             $this->setAttribute($prop, $locator);
-            //$property->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $this->currentClassLikeFqcn);
+            // $property->setAttribute(NodeLocatorAttacher::ATTR_LOCATOR, $this->currentClassLikeFqcn);
             $this->setAttribute($property, $this->currentClassLikeFqcn);
         }
     }
 
-
-    /**
-     * @return non-empty-string
-     */
     private function currentScopeOrFileFallback(): string
     {
         $current = end($this->scopeStack);
@@ -276,20 +239,14 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
 
     /**
      * Push a new scope locator onto the stack.
-     *
-     * @param NodeLocator $locator
-     *
-     * @return void
      */
     private function pushScope(NodeLocator $locator): void
     {
-        $this->scopeStack[] = $locator;
+        $this->scopeStack[] = $locator->toString();
     }
 
     /**
      * Pop current scope locator from the stack.
-     *
-     * @return void
      */
     private function popScope(): void
     {
@@ -297,8 +254,6 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
     }
 
     /**
-     * @param non-empty-string $parentScope
-     *
      * @return int 0-based index
      */
     private function nextClosureIndex(string $parentScope): int
@@ -309,8 +264,6 @@ final class NodeLocatorAttacherVisitor extends AbstractNodeVisitor
     }
 
     /**
-     * @param non-empty-string $parentScope
-     *
      * @return int 0-based index
      */
     private function nextArrowIndex(string $parentScope): int

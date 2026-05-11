@@ -19,9 +19,9 @@ final class RemoveDoubleNopVisitor extends AbstractNodeVisitor
     /**
      * Cleans consecutive Nop statements inside any node that contains "stmts".
      *
-     * @param Node $node The current AST node.
+     * @param Node $node the current AST node
      *
-     * @return Node|null The possibly modified node.
+     * @return Node|null the possibly modified node
      */
     public function leaveNode(Node $node): ?Node
     {

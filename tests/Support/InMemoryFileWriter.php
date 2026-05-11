@@ -23,10 +23,8 @@ final class InMemoryFileWriter implements FileWriterInterface
     /**
      * Writes an AST for one path.
      *
-     * @param Node[] $ast The AST to write.
-     * @param string $filePath The written file path.
-     *
-     * @return void
+     * @param Node[] $ast      the AST to write
+     * @param string $filePath the written file path
      */
     public function writeAst(array $ast, string $filePath): void
     {
@@ -36,10 +34,8 @@ final class InMemoryFileWriter implements FileWriterInterface
     /**
      * Writes content for one path.
      *
-     * @param string $filePath The written file path.
-     * @param string $content The written file content.
-     *
-     * @return void
+     * @param string $filePath the written file path
+     * @param string $content  the written file content
      */
     public function writeContent(string $filePath, string $content): void
     {
@@ -50,9 +46,7 @@ final class InMemoryFileWriter implements FileWriterInterface
     /**
      * Creates a directory.
      *
-     * @param string $dir The directory path.
-     *
-     * @return void
+     * @param string $dir the directory path
      */
     public function createDirectory(string $dir): void
     {
@@ -61,9 +55,7 @@ final class InMemoryFileWriter implements FileWriterInterface
     /**
      * Checks that a directory exists.
      *
-     * @param string $dir The directory path.
-     *
-     * @return void
+     * @param string $dir the directory path
      */
     public function checkDirExists(string $dir): void
     {
@@ -72,9 +64,7 @@ final class InMemoryFileWriter implements FileWriterInterface
     /**
      * Returns written content for one path.
      *
-     * @param string $path The file path.
-     *
-     * @return string|null
+     * @param string $path the file path
      */
     public function contentFor(string $path): ?string
     {
@@ -83,8 +73,6 @@ final class InMemoryFileWriter implements FileWriterInterface
 
     /**
      * Counts writes performed by the writer.
-     *
-     * @return int
      */
     public function writeCount(): int
     {

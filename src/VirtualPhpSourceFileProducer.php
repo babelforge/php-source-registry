@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\PrettyPrinter\Standard;
 
 /**
- * Class VirtualPhpSourceFileProducer
+ * Class VirtualPhpSourceFileProducer.
  *
  * Splits a PHP file AST into one or more virtual files.
  *
@@ -27,19 +27,17 @@ use PhpParser\PrettyPrinter\Standard;
 final readonly class VirtualPhpSourceFileProducer
 {
     public function __construct(
-        private ParserInterface      $parser = new UserLandParser(),
-        private Standard             $printer = new NopPrinter(),
-        private Standard             $standardPrinter = new Standard(),
+        private ParserInterface $parser = new UserLandParser(),
+        private Standard $printer = new NopPrinter(),
+        private Standard $standardPrinter = new Standard(),
     ) {
     }
 
     /**
      * Produce virtual files from a PHP AST.
      *
-     * @param string $filePath The source file path.
-     * @param Node[] $nodes The AST nodes of the source file.
-     *
-     * @return VirtualPhpSourceFileCollection
+     * @param string $filePath the source file path
+     * @param Node[] $nodes    the AST nodes of the source file
      */
     public function produceVirtualPhpSourceFiles(string $filePath, array $nodes): VirtualPhpSourceFileCollection
     {
@@ -80,18 +78,16 @@ final readonly class VirtualPhpSourceFileProducer
     /**
      * Produce virtual files for a namespace scope.
      *
-     * @param string $filePath The source file path.
-     * @param Node[] $globalPrelude The file-level statements to prepend to every produced file.
-     * @param Namespace_ $namespace The namespace node to split.
-     * @param int $startIndex The starting virtual file index.
-     *
-     * @return VirtualPhpSourceFileCollection
+     * @param string     $filePath      the source file path
+     * @param Node[]     $globalPrelude the file-level statements to prepend to every produced file
+     * @param Namespace_ $namespace     the namespace node to split
+     * @param int        $startIndex    the starting virtual file index
      */
     private function produceNamespaceVirtualFiles(
-        string     $filePath,
-        array      $globalPrelude,
+        string $filePath,
+        array $globalPrelude,
         Namespace_ $namespace,
-        int        $startIndex,
+        int $startIndex,
     ): VirtualPhpSourceFileCollection {
         $namespaceStatements = $namespace->stmts;
         $virtualFiles = new VirtualPhpSourceFileCollection();
@@ -145,10 +141,8 @@ final readonly class VirtualPhpSourceFileProducer
     /**
      * Produce virtual files for the global scope.
      *
-     * @param string $filePath The source file path.
-     * @param Node[] $nodes The file AST nodes.
-     *
-     * @return VirtualPhpSourceFileCollection
+     * @param string $filePath the source file path
+     * @param Node[] $nodes    the file AST nodes
      */
     private function produceGlobalScopeVirtualFiles(string $filePath, array $nodes): VirtualPhpSourceFileCollection
     {
@@ -195,10 +189,7 @@ final readonly class VirtualPhpSourceFileProducer
     }
 
     /**
-     * @param string $filePath
-     * @param string $virtualFilePath
      * @param Node[] $nodes
-     * @return VirtualPhpSourceFile
      */
     private function createVirtualPhpSourceFile(string $filePath, string $virtualFilePath, array $nodes): VirtualPhpSourceFile
     {
@@ -217,9 +208,7 @@ final readonly class VirtualPhpSourceFileProducer
      *
      * Anonymous classes are ignored because they are expressions, not top-level statements.
      *
-     * @param Node $node The node to inspect.
-     *
-     * @return bool
+     * @param Node $node the node to inspect
      */
     private function isTopLevelClassLike(Node $node): bool
     {
@@ -229,10 +218,8 @@ final readonly class VirtualPhpSourceFileProducer
     /**
      * Build the virtual file path.
      *
-     * @param string $filePath The source file path.
-     * @param int $index The virtual file index.
-     *
-     * @return string
+     * @param string $filePath the source file path
+     * @param int    $index    the virtual file index
      */
     private function buildVirtualFilePath(string $filePath, int $index): string
     {

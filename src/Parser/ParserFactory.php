@@ -19,5 +19,4 @@ class ParserFactory
 
         return self::$parser;
     }
-
 }

@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
-use RuntimeException;
 
 /**
  * Rewrites fully-qualified class names used in code into short names and
@@ -41,9 +40,6 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
      */
     private array $plannedUsesByAlias = [];
 
-    /**
-     * @var Namespace_|null
-     */
     private ?Namespace_ $namespace = null;
 
     /**
@@ -58,7 +54,9 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
     /**
      * Resets the visitor state before traversing a new file AST.
+     *
      * @param Node[] $nodes
+     *
      * @return ?Node[]
      */
     public function beforeTraverse(array $nodes): ?array
@@ -75,7 +73,7 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
     /**
      * Rewrites fully-qualified names found in code into short names when safe.
      *
-     * @throws RuntimeException When the FQCN short name cannot be determined.
+     * @throws \RuntimeException when the FQCN short name cannot be determined
      */
     public function leaveNode(Node $node): ?Node
     {
@@ -103,7 +101,7 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
         $alias = $this->existingAliasesByFqcn[$fqcn] ?? $node->getLast();
 
         if ('' === $alias) {
-            throw new RuntimeException(sprintf('Unable to determine alias for FQCN "%s".', $fqcn));
+            throw new \RuntimeException(sprintf('Unable to determine alias for FQCN "%s".', $fqcn));
         }
 
         if (isset($this->existingUsesByAlias[$alias])) {
@@ -153,8 +151,6 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
      * Collects existing imports from the file to avoid duplicates and collisions.
      *
      * @param Node[] $nodes
-     *
-     * @return void
      */
     private function collectExistingUses(array $nodes): void
     {
@@ -187,9 +183,6 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
     /**
      * Registers aliases already declared by use statements.
-     *
-     * @param Use_ $use
-     * @return void
      */
     private function registerUseStatement(Use_ $use): void
     {
@@ -204,10 +197,6 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
     /**
      * Registers aliases already declared by one grouped use statement.
-     *
-     * @param GroupUse $groupUse
-     *
-     * @return void
      */
     private function registerGroupUseStatement(GroupUse $groupUse): void
     {
@@ -218,7 +207,7 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
             $fqcn = '' === $prefix
                 ? $suffix
-                : $prefix . '\\' . $suffix;
+                : $prefix.'\\'.$suffix;
 
             $alias = $useItem->getAlias()->toString();
 
@@ -242,9 +231,6 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
     /**
      * Injects planned imports inside a namespace block.
-     *
-     * @param Namespace_ $namespace
-     * @return void
      */
     private function injectUsesIntoNamespace(Namespace_ $namespace): void
     {
@@ -258,7 +244,9 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
         foreach ($namespace->stmts as $index => $stmt) {
             if (!$stmt instanceof Use_) {
-                $firstNonUseIndex = $index;
+                if (is_int($index)) {
+                    $firstNonUseIndex = $index;
+                }
 
                 break;
             }
@@ -268,7 +256,7 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
             $namespace->stmts = [
                 ...$namespace->stmts,
                 ...$uses,
-                //new Stmt\Nop()
+                // new Stmt\Nop()
             ];
 
             return;
@@ -280,9 +268,9 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
     /**
      * Injects planned imports at root level for files without namespace.
      *
-     * @param array<int, Node> $nodes
+     * @param array<Node> $nodes
      *
-     * @return array<int, Node>
+     * @return array<Node>
      */
     private function injectUsesIntoRoot(array $nodes): array
     {
@@ -296,7 +284,9 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
         foreach ($nodes as $index => $node) {
             if ($node instanceof Stmt\Declare_ || $node instanceof Use_) {
-                $firstNonDeclareOrUseIndex = $index + 1;
+                if (is_int($index)) {
+                    $firstNonDeclareOrUseIndex = $index + 1;
+                }
 
                 continue;
             }
@@ -339,10 +329,6 @@ final class ImportFullyQualifiedNameVisitor extends AbstractNodeVisitor
 
     /**
      * Processes one TraitUse statement and normalizes fully-qualified trait names.
-     *
-     * @param TraitUse $traitUse
-     *
-     * @return void
      */
     private function processTraitUse(TraitUse $traitUse): void
     {
