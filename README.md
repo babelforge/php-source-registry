@@ -134,6 +134,7 @@ $registry->saveSourceFile('/project/src/UserService.php');
 ```
 
 `saveSourceFile()` writes the file only when at least one of its virtual files is updated.
+It normalizes existing source file paths before lookup, so equivalent paths pointing to the same physical file target the same registered source file.
 It throws `RuntimeException` when the physical source file is not known by the current registry instance.
 
 ## Static Facade Usage

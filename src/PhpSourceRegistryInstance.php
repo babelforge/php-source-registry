@@ -65,16 +65,22 @@ class PhpSourceRegistryInstance
 
     public function hasFile(string $filePath): bool
     {
+        $filePath = $this->normalizeSourceFilePath($filePath);
+
         return array_any($this->files, fn ($file) => $file->path === $filePath);
     }
 
     public function getFile(string $filePath): ?PhpSourceFile
     {
+        $filePath = $this->normalizeSourceFilePath($filePath);
+
         return array_find($this->files, fn ($file) => $file->path === $filePath);
     }
 
     public function getVirtualFiles(string $filePath): VirtualPhpSourceFileCollection
     {
+        $filePath = $this->normalizeSourceFilePath($filePath);
+
         if (null === $file = $this->getFile($filePath)) {
             $originalNonTransformedNodes = $this->parser->simpleParseFile($filePath);
             $virtualFiles = $this->virtualRegistryFileProducer->produceVirtualPhpSourceFiles(
@@ -172,6 +178,7 @@ class PhpSourceRegistryInstance
 
     public function saveSourceFile(string $filePath): void
     {
+        $filePath = $this->normalizeSourceFilePath($filePath);
         $file = $this->getFile($filePath);
 
         if (null === $file) {
@@ -249,5 +256,16 @@ class PhpSourceRegistryInstance
     private function log(string $message): void
     {
         $this->logger?->info($message);
+    }
+
+    private function normalizeSourceFilePath(string $filePath): string
+    {
+        $realPath = realpath($filePath);
+
+        if (false === $realPath) {
+            return $filePath;
+        }
+
+        return $realPath;
     }
 }

@@ -332,6 +332,48 @@ final class PhpSourceRegistryInstanceTest extends TestCase
     }
 
     /**
+     * Ensures saving one source file accepts an equivalent non-normalized path.
+     */
+    public function testSaveSourceFileNormalizesEquivalentSourceFilePath(): void
+    {
+        $sourceDirectory = sys_get_temp_dir().'/php-source-registry-source-'.bin2hex(random_bytes(8));
+        $nestedDirectory = $sourceDirectory.'/src/nested';
+        mkdir($nestedDirectory, 0o777, true);
+
+        $sourcePath = $sourceDirectory.'/src/Mailer.php';
+        file_put_contents($sourcePath, <<<'PHP'
+            <?php
+
+            namespace App;
+
+            final class MailerBeforeSave
+            {
+            }
+            PHP);
+
+        $fileWriter = new InMemoryFileWriter();
+        $registry = new PhpSourceRegistryInstance($fileWriter);
+        $virtualFile = $registry->getVirtualFiles($sourcePath)->get(0);
+        self::assertNotNull($virtualFile);
+
+        $nodes = $virtualFile->getAst();
+        $this->renameFirstClass($nodes, 'MailerAfterSave');
+        $registry->updateVirtualFileAst($virtualFile->virtualFilePath, $nodes);
+
+        $registry->saveSourceFile($nestedDirectory.'/../Mailer.php');
+
+        $normalizedSourcePath = realpath($sourcePath);
+        self::assertIsString($normalizedSourcePath);
+        self::assertStringContainsString('final class MailerAfterSave', $fileWriter->contentFor($normalizedSourcePath) ?? '');
+        self::assertFalse($virtualFile->isUpdated());
+
+        unlink($sourcePath);
+        rmdir($nestedDirectory);
+        rmdir($sourceDirectory.'/src');
+        rmdir($sourceDirectory);
+    }
+
+    /**
      * Ensures saving an unknown source file fails clearly.
      */
     public function testSaveSourceFileFailsForUnknownSourceFile(): void

@@ -65,6 +65,7 @@ $registry->saveSourceFile('/project/src/UserService.php');
 ```
 
 The source file must already be loaded in the current registry instance.
+Existing source file paths are normalized before lookup, so equivalent paths pointing to the same physical file resolve to the registered source file.
 
 The method writes only when at least one virtual file from that physical source file is updated. After a successful write, the same reboot semantics as `save()` apply.
 
