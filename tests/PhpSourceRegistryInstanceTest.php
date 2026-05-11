@@ -220,6 +220,39 @@ final class PhpSourceRegistryInstanceTest extends TestCase
     }
 
     /**
+     * Ensures the registry writes updated virtual files with the default native writer.
+     */
+    public function testSaveWritesWithDefaultNativeFileWriter(): void
+    {
+        $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
+            <?php
+
+            namespace App;
+
+            final class NativeBeforeSave
+            {
+            }
+            PHP);
+
+        $registry = new PhpSourceRegistryInstance();
+        $virtualFile = $registry->getVirtualFiles($sourcePath)->get(0);
+        self::assertNotNull($virtualFile);
+
+        $nodes = $virtualFile->getAst();
+        $this->renameFirstClass($nodes, 'NativeAfterSave');
+        $registry->updateVirtualFileAst($virtualFile->virtualFilePath, $nodes);
+
+        $registry->save();
+
+        $content = file_get_contents($sourcePath);
+        self::assertIsString($content);
+        self::assertStringContainsString('final class NativeAfterSave', $content);
+        self::assertFalse($virtualFile->isUpdated());
+
+        unlink($sourcePath);
+    }
+
+    /**
      * Creates a temporary PHP source file.
      *
      * @param string $code the PHP source code

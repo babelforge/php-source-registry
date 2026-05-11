@@ -8,6 +8,7 @@ use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
 use PhpNoobs\PhpSource\Contracts\ParserInterface;
 use PhpNoobs\PhpSource\Parser\UserLandParser;
 use PhpNoobs\PhpSource\Printer\NopPrinter;
+use PhpNoobs\PhpSource\Writer\NativeFileWriter;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Psr\Log\LoggerInterface;
@@ -33,7 +34,7 @@ class PhpSourceRegistryInstance
     protected array $watchedFiles = [];
 
     public function __construct(
-        protected ?FileWriterInterface $fileWriter = null,
+        protected FileWriterInterface $fileWriter = new NativeFileWriter(),
         protected ?LoggerInterface $logger = null,
     ) {
         $this->parser = new UserLandParser();

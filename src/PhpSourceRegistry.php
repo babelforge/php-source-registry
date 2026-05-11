@@ -6,6 +6,7 @@ namespace PhpNoobs\PhpSource;
 
 use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
 use PhpNoobs\PhpSource\Contracts\ParserInterface;
+use PhpNoobs\PhpSource\Writer\NativeFileWriter;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 
@@ -27,9 +28,14 @@ final class PhpSourceRegistry
 
     private static function new(): PhpSourceRegistryInstance
     {
-        self::$instance ??= new PhpSourceRegistryInstance(self::$fileWriter);
+        self::$instance ??= new PhpSourceRegistryInstance(self::fileWriter());
 
         return self::$instance;
+    }
+
+    private static function fileWriter(): FileWriterInterface
+    {
+        return self::$fileWriter ??= new NativeFileWriter();
     }
 
     public static function setFileWriter(FileWriterInterface $fileWriter): void

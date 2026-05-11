@@ -54,6 +54,8 @@ It implements `Countable` and `IteratorAggregate`.
 
 ## Basic Usage
 
+Additional package documentation starts in [doc/README.md](doc/README.md).
+
 ```php
 use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
 
@@ -88,6 +90,42 @@ if (null !== $virtualFile) {
 ```
 
 `save()` reassembles only physical files that contain at least one updated virtual file.
+By default, it writes through `Writer\NativeFileWriter` and reboots updated virtual files after writing.
+
+## File Writing
+
+`PhpSourceRegistryInstance` uses `PhpNoobs\PhpSource\Writer\NativeFileWriter` by default:
+
+```php
+use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+
+$registry = new PhpSourceRegistryInstance();
+
+// Mutate virtual files, then write updated physical files.
+$registry->save();
+```
+
+You may still inject a custom writer, for example in tests:
+
+```php
+use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
+use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+
+/** @var FileWriterInterface $writer */
+$registry = new PhpSourceRegistryInstance($writer);
+```
+
+The static facade also uses `NativeFileWriter` by default. To override it:
+
+```php
+use PhpNoobs\PhpSource\PhpSourceRegistry;
+use PhpNoobs\PhpSource\Writer\NativeFileWriter;
+
+PhpSourceRegistry::setFileWriter(new NativeFileWriter());
+```
+
+`save()` only writes physical files that contain at least one updated virtual file.
+After a physical file is written, its updated virtual files are rebooted so their update flags are cleared and their AST state is reparsed from the written code.
 
 ## Static Facade Usage
 
