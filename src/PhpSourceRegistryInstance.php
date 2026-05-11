@@ -170,6 +170,31 @@ class PhpSourceRegistryInstance
         }
     }
 
+    public function saveSourceFile(string $filePath): void
+    {
+        $file = $this->getFile($filePath);
+
+        if (null === $file) {
+            throw new \RuntimeException("Source file $filePath not found");
+        }
+
+        if (!$file->isUpdated()) {
+            return;
+        }
+
+        $this->log(str_repeat('=', 100));
+        $this->log("Saving source file $filePath");
+
+        $code = $file->save();
+
+        if ($this->isWatchedFile($file->path)) {
+            $this->log("Found tested file $file->path");
+        }
+
+        $this->log($code);
+        $this->log(str_repeat('-', 100));
+    }
+
     public function addWatchedFile(string $file): void
     {
         if (!in_array($file, $this->watchedFiles, true)) {

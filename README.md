@@ -127,6 +127,15 @@ PhpSourceRegistry::setFileWriter(new NativeFileWriter());
 `save()` only writes physical files that contain at least one updated virtual file.
 After a physical file is written, its updated virtual files are rebooted so their update flags are cleared and their AST state is reparsed from the written code.
 
+To write only one known physical source file:
+
+```php
+$registry->saveSourceFile('/project/src/UserService.php');
+```
+
+`saveSourceFile()` writes the file only when at least one of its virtual files is updated.
+It throws `RuntimeException` when the physical source file is not known by the current registry instance.
+
 ## Static Facade Usage
 
 ```php

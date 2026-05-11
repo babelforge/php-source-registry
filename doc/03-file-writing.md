@@ -61,4 +61,12 @@ $registry->save();
 
 No rename, transaction, or graph cache policy is implemented in this package.
 
+When `php-rename` wants to write one already-loaded physical file, it can call:
+
+```php
+$registry->saveSourceFile('/project/src/App/Mailer.php');
+```
+
+This uses the same configured writer and reassembly path as `save()`, but only for the requested source file.
+
 Navigation: [Documentation](README.md) | [Previous: Public Usage](02-public-usage.md) | [Next: Testing And Maintenance](04-testing-and-maintenance.md)

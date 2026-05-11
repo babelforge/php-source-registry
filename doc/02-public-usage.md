@@ -56,4 +56,18 @@ PhpSourceRegistry::setFileWriter(new NativeFileWriter());
 
 After a physical file is written, updated virtual files are rebooted. This clears their update flags and reparses AST state from the written code.
 
+## Save One Source File
+
+Use `saveSourceFile()` when only one known physical source file should be considered:
+
+```php
+$registry->saveSourceFile('/project/src/UserService.php');
+```
+
+The source file must already be loaded in the current registry instance.
+
+The method writes only when at least one virtual file from that physical source file is updated. After a successful write, the same reboot semantics as `save()` apply.
+
+If the source file is not known by the registry, `saveSourceFile()` throws `RuntimeException`.
+
 Navigation: [Documentation](README.md) | [Previous: Overview](01-overview.md) | [Next: File Writing](03-file-writing.md)

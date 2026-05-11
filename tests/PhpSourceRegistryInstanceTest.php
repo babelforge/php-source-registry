@@ -253,6 +253,98 @@ final class PhpSourceRegistryInstanceTest extends TestCase
     }
 
     /**
+     * Ensures one source file can be saved without writing other updated files.
+     */
+    public function testItSavesOneSourceFile(): void
+    {
+        $firstSourcePath = $this->createTemporaryPhpFile(<<<'PHP'
+            <?php
+
+            namespace App;
+
+            final class FirstBeforeSave
+            {
+            }
+            PHP);
+        $secondSourcePath = $this->createTemporaryPhpFile(<<<'PHP'
+            <?php
+
+            namespace App;
+
+            final class SecondBeforeSave
+            {
+            }
+            PHP);
+
+        $fileWriter = new InMemoryFileWriter();
+        $registry = new PhpSourceRegistryInstance($fileWriter);
+
+        $firstVirtualFile = $registry->getVirtualFiles($firstSourcePath)->get(0);
+        $secondVirtualFile = $registry->getVirtualFiles($secondSourcePath)->get(0);
+        self::assertNotNull($firstVirtualFile);
+        self::assertNotNull($secondVirtualFile);
+
+        $firstNodes = $firstVirtualFile->getAst();
+        $this->renameFirstClass($firstNodes, 'FirstAfterSave');
+        $registry->updateVirtualFileAst($firstVirtualFile->virtualFilePath, $firstNodes);
+
+        $secondNodes = $secondVirtualFile->getAst();
+        $this->renameFirstClass($secondNodes, 'SecondAfterSave');
+        $registry->updateVirtualFileAst($secondVirtualFile->virtualFilePath, $secondNodes);
+
+        $registry->saveSourceFile($firstSourcePath);
+
+        self::assertSame(1, $fileWriter->writeCount());
+        self::assertStringContainsString('final class FirstAfterSave', $fileWriter->contentFor($firstSourcePath) ?? '');
+        self::assertNull($fileWriter->contentFor($secondSourcePath));
+        self::assertFalse($firstVirtualFile->isUpdated());
+        self::assertTrue($secondVirtualFile->isUpdated());
+
+        unlink($firstSourcePath);
+        unlink($secondSourcePath);
+    }
+
+    /**
+     * Ensures saving one known unchanged source file does not write.
+     */
+    public function testSaveSourceFileDoesNotWriteUnchangedSourceFile(): void
+    {
+        $sourcePath = $this->createTemporaryPhpFile(<<<'PHP'
+            <?php
+
+            namespace App;
+
+            final class UnchangedSingleFile
+            {
+            }
+            PHP);
+
+        $fileWriter = new InMemoryFileWriter();
+        $registry = new PhpSourceRegistryInstance($fileWriter);
+        $registry->getVirtualFiles($sourcePath);
+
+        $registry->saveSourceFile($sourcePath);
+
+        self::assertSame(0, $fileWriter->writeCount());
+        self::assertNull($fileWriter->contentFor($sourcePath));
+
+        unlink($sourcePath);
+    }
+
+    /**
+     * Ensures saving an unknown source file fails clearly.
+     */
+    public function testSaveSourceFileFailsForUnknownSourceFile(): void
+    {
+        $registry = new PhpSourceRegistryInstance(new InMemoryFileWriter());
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Source file /project/src/Missing.php not found');
+
+        $registry->saveSourceFile('/project/src/Missing.php');
+    }
+
+    /**
      * Creates a temporary PHP source file.
      *
      * @param string $code the PHP source code

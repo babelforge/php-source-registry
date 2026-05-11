@@ -74,6 +74,11 @@ final class PhpSourceRegistry
         self::new()->save();
     }
 
+    public static function saveSourceFile(string $filePath): void
+    {
+        self::new()->saveSourceFile($filePath);
+    }
+
     public static function addWatchedFile(string $file): void
     {
         self::new()->addWatchedFile($file);
