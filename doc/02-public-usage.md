@@ -2,7 +2,7 @@
 
 Navigation: [Documentation](README.md) | [Previous: Overview](01-overview.md) | [Next: File Writing](03-file-writing.md)
 
-The public API should stay small: load virtual files, mutate AST nodes, register updates, and save updated physical files.
+The public API loads virtual files, exposes AST nodes, registers updates, and saves updated physical files.
 
 ## Stateful Instance
 
@@ -58,7 +58,7 @@ After a physical file is written, updated virtual files are rebooted. This clear
 
 ## Save One Source File
 
-Use `saveSourceFile()` when only one known physical source file should be considered:
+Use `saveSourceFile()` to save one known physical source file:
 
 ```php
 $registry->saveSourceFile('/project/src/UserService.php');

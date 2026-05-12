@@ -2,7 +2,7 @@
 
 Navigation: [Documentation](README.md) | [Previous: File Writing](03-file-writing.md)
 
-`PhpSourceRegistry` should keep behavior covered at the source-registry boundary.
+`PhpSourceRegistry` behavior is covered at the source-registry boundary.
 
 ## Quality Commands
 
@@ -33,7 +33,7 @@ Important cases:
 
 ## Registry Save Tests
 
-Registry save behavior should keep proving that:
+Registry save tests cover that:
 
 - unchanged files are not written;
 - updated virtual files are written;
@@ -44,6 +44,6 @@ Registry save behavior should keep proving that:
 
 Do not add rename policy, transaction policy, cache refresh policy, or dependency graph behavior here.
 
-Source writing should remain a primitive used by higher-level packages.
+Source writing is a primitive used by higher-level packages.
 
 Navigation: [Documentation](README.md) | [Previous: File Writing](03-file-writing.md)

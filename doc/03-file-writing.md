@@ -59,7 +59,7 @@ $registry = new PhpSourceRegistryInstance();
 $registry->save();
 ```
 
-No rename, transaction, or graph cache policy is implemented in this package.
+Rename, transaction, and graph cache policies are handled outside this package.
 
 When `php-rename` wants to write one already-loaded physical file, it can call:
 
