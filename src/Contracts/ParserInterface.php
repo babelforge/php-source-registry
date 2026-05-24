@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Contracts;
+namespace BabelForge\PhpSource\Contracts;
 
 use PhpParser\Node;
 

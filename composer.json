@@ -1,15 +1,15 @@
 {
-    "name": "php-noobs/php-source-registry",
+    "name": "babelforge/php-source-registry",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "PhpNoobs\\PhpSource\\": "src/"
+            "BabelForge\\PhpSource\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "PhpNoobs\\PhpSource\\Tests\\": "tests/"
+            "BabelForge\\PhpSource\\Tests\\": "tests/"
         }
     },
     "require": {

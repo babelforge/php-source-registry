@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Node;
+namespace BabelForge\PhpSource\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;

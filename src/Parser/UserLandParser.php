@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser;
+namespace BabelForge\PhpSource\Parser;
 
-use PhpNoobs\PhpSource\Contracts\ParserInterface;
-use PhpNoobs\PhpSource\FileSystem\ReflectionFileLocator;
-use PhpNoobs\PhpSource\Parser\Collectors\UseImportsCollector;
-use PhpNoobs\PhpSource\Parser\Traversers\NodeLocatorAttacher;
-use PhpNoobs\PhpSource\Parser\Traversers\RemoveDoubleNopTraverser;
-use PhpNoobs\PhpSource\Printer\NopPrinter;
+use BabelForge\PhpSource\Contracts\ParserInterface;
+use BabelForge\PhpSource\FileSystem\ReflectionFileLocator;
+use BabelForge\PhpSource\Parser\Collectors\UseImportsCollector;
+use BabelForge\PhpSource\Parser\Traversers\NodeLocatorAttacher;
+use BabelForge\PhpSource\Parser\Traversers\RemoveDoubleNopTraverser;
+use BabelForge\PhpSource\Printer\NopPrinter;
 use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

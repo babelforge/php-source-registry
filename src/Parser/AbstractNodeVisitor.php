@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser;
+namespace BabelForge\PhpSource\Parser;
 
 use PhpParser\NodeVisitorAbstract;
 

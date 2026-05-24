@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Tests;
+namespace BabelForge\PhpSource\Tests;
 
-use PhpNoobs\PhpSource\VirtualPhpSourceFile;
-use PhpNoobs\PhpSource\VirtualPhpSourceFileCollection;
+use BabelForge\PhpSource\VirtualPhpSourceFile;
+use BabelForge\PhpSource\VirtualPhpSourceFileCollection;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPUnit\Framework\TestCase;

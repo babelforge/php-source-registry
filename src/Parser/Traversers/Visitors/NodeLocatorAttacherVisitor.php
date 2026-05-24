@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser\Traversers\Visitors;
+namespace BabelForge\PhpSource\Parser\Traversers\Visitors;
 
-use PhpNoobs\PhpSource\Locator\NodeLocator;
-use PhpNoobs\PhpSource\Parser\AbstractNodeVisitor;
-use PhpNoobs\PhpSource\Parser\Traversers\NodeLocatorAttacher;
+use BabelForge\PhpSource\Locator\NodeLocator;
+use BabelForge\PhpSource\Parser\AbstractNodeVisitor;
+use BabelForge\PhpSource\Parser\Traversers\NodeLocatorAttacher;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource;
+namespace BabelForge\PhpSource;
 
 /**
  * Class VirtualPhpSourceFileCollection.

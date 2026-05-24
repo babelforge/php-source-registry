@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Printer;
+namespace BabelForge\PhpSource\Printer;
 
-use PhpNoobs\PhpSource\Parser\Traversers\ReadyToPrintTraverser;
+use BabelForge\PhpSource\Parser\Traversers\ReadyToPrintTraverser;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Token;

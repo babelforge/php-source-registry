@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Locator;
+namespace BabelForge\PhpSource\Locator;
 
 /**
  * Represents a stable, semantic locator for an AST node.

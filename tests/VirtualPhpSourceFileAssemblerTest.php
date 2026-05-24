@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Tests;
+namespace BabelForge\PhpSource\Tests;
 
-use PhpNoobs\PhpSource\Parser\UserLandParser;
-use PhpNoobs\PhpSource\VirtualPhpSourceFileAssembler;
-use PhpNoobs\PhpSource\VirtualPhpSourceFileProducer;
+use BabelForge\PhpSource\Parser\UserLandParser;
+use BabelForge\PhpSource\VirtualPhpSourceFileAssembler;
+use BabelForge\PhpSource\VirtualPhpSourceFileProducer;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;

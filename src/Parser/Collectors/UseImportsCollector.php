@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser\Collectors;
+namespace BabelForge\PhpSource\Parser\Collectors;
 
-use PhpNoobs\PhpSource\Parser\AbstractNodeTraverser;
-use PhpNoobs\PhpSource\Parser\Collectors\Visitors\CollectUseImportsVisitor;
+use BabelForge\PhpSource\Parser\AbstractNodeTraverser;
+use BabelForge\PhpSource\Parser\Collectors\Visitors\CollectUseImportsVisitor;
 use PhpParser\Node;
 
 /**

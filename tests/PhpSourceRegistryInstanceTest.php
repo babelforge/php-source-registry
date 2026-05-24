@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Tests;
+namespace BabelForge\PhpSource\Tests;
 
-use PhpNoobs\PhpSource\PhpSourceRegistry;
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
-use PhpNoobs\PhpSource\Tests\Support\InMemoryFileWriter;
+use BabelForge\PhpSource\PhpSourceRegistry;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\Tests\Support\InMemoryFileWriter;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;

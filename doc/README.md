@@ -17,9 +17,9 @@ It does not own rename policy, dependency analysis, transaction policy, semantic
 
 ## External Consumers
 
-`php-noobs/php-rename` can mutate `VirtualPhpSourceFile` AST nodes in memory and then rely on this package to write updated physical files.
+`babelforge/php-rename` can mutate `VirtualPhpSourceFile` AST nodes in memory and then rely on this package to write updated physical files.
 
-`php-noobs/member-graph` can consume virtual files and AST facts, but source writing remains in this package boundary.
+`babelforge/member-graph` can consume virtual files and AST facts, but source writing remains in this package boundary.
 
 ## Current Layout
 

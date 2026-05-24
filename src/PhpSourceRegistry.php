@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource;
+namespace BabelForge\PhpSource;
 
-use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
-use PhpNoobs\PhpSource\Contracts\ParserInterface;
-use PhpNoobs\PhpSource\Writer\NativeFileWriter;
+use BabelForge\PhpSource\Contracts\FileWriterInterface;
+use BabelForge\PhpSource\Contracts\ParserInterface;
+use BabelForge\PhpSource\Writer\NativeFileWriter;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 

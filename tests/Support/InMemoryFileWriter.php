@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Tests\Support;
+namespace BabelForge\PhpSource\Tests\Support;
 
-use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
+use BabelForge\PhpSource\Contracts\FileWriterInterface;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 

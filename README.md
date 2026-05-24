@@ -1,13 +1,13 @@
 # PHP Source Registry
 
-`php-noobs/php-source-registry` is a PHP 8.4+ source/AST registry built on top of `nikic/php-parser`.
+`babelforge/php-source-registry` is a PHP 8.4+ source/AST registry built on top of `nikic/php-parser`.
 
 It loads physical PHP files, splits them into virtual source files, exposes their PHPParser AST nodes, tracks in-memory updates, reassembles updated virtual files, and writes the resulting physical files through a local filesystem writer.
 
 ## Installation
 
 ```bash
-composer require php-noobs/php-source-registry
+composer require babelforge/php-source-registry
 ```
 
 The package requires PHP 8.4 or later.
@@ -17,7 +17,7 @@ The package requires PHP 8.4 or later.
 Use `PhpSourceRegistryInstance` when application services share the same loaded source state:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
 
 $registry = new PhpSourceRegistryInstance();
 
@@ -35,7 +35,7 @@ foreach ($virtualFiles as $virtualFile) {
 `updateVirtualFileAst()` marks one virtual file as updated. `save()` writes every physical file that contains at least one updated virtual file.
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
 
 $registry = new PhpSourceRegistryInstance();
 $virtualFiles = $registry->getVirtualFiles('/project/src/UserService.php');
@@ -65,10 +65,10 @@ Existing source file paths are normalized before lookup, so equivalent paths poi
 
 ## File Writing
 
-`PhpSourceRegistryInstance` uses `PhpNoobs\PhpSource\Writer\NativeFileWriter` by default:
+`PhpSourceRegistryInstance` uses `BabelForge\PhpSource\Writer\NativeFileWriter` by default:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
 
 $registry = new PhpSourceRegistryInstance();
 $registry->save();
@@ -79,8 +79,8 @@ $registry->save();
 Inject a custom writer when tests or integrations need to capture writes:
 
 ```php
-use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\Contracts\FileWriterInterface;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
 
 /** @var FileWriterInterface $writer */
 $registry = new PhpSourceRegistryInstance($writer);
@@ -91,7 +91,7 @@ $registry = new PhpSourceRegistryInstance($writer);
 `PhpSourceRegistry` provides a static facade around a current registry instance:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistry;
+use BabelForge\PhpSource\PhpSourceRegistry;
 
 PhpSourceRegistry::clear();
 
@@ -101,8 +101,8 @@ $virtualFiles = PhpSourceRegistry::getVirtualFiles('/project/src/UserService.php
 The facade uses `NativeFileWriter` by default. Override it before loading files when a custom writer is required:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistry;
-use PhpNoobs\PhpSource\Writer\NativeFileWriter;
+use BabelForge\PhpSource\PhpSourceRegistry;
+use BabelForge\PhpSource\Writer\NativeFileWriter;
 
 PhpSourceRegistry::clear();
 PhpSourceRegistry::setFileWriter(new NativeFileWriter());

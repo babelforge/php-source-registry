@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser\Traversers;
+namespace BabelForge\PhpSource\Parser\Traversers;
 
 use PhpParser\Node;
 

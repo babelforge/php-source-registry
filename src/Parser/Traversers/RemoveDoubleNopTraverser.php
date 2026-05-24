@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser\Traversers;
+namespace BabelForge\PhpSource\Parser\Traversers;
 
-use PhpNoobs\PhpSource\Parser\AbstractNodeTraverser;
-use PhpNoobs\PhpSource\Parser\Traversers\Visitors\RemoveDoubleNopVisitor;
+use BabelForge\PhpSource\Parser\AbstractNodeTraverser;
+use BabelForge\PhpSource\Parser\Traversers\Visitors\RemoveDoubleNopVisitor;
 
 class RemoveDoubleNopTraverser extends AbstractNodeTraverser
 {

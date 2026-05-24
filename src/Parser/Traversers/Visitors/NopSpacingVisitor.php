@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser\Traversers\Visitors;
+namespace BabelForge\PhpSource\Parser\Traversers\Visitors;
 
-use PhpNoobs\PhpSource\Node\IsNode;
-use PhpNoobs\PhpSource\Parser\AbstractNodeVisitor;
+use BabelForge\PhpSource\Node\IsNode;
+use BabelForge\PhpSource\Parser\AbstractNodeVisitor;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;

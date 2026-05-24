@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\FileSystem;
+namespace BabelForge\PhpSource\FileSystem;
 
 /**
  * Resolves a class/trait/interface FQCN to its source file using PHP Reflection.

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Parser\Collectors\Visitors;
+namespace BabelForge\PhpSource\Parser\Collectors\Visitors;
 
-use PhpNoobs\PhpSource\Parser\AbstractNodeVisitor;
+use BabelForge\PhpSource\Parser\AbstractNodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Tests\Writer;
+namespace BabelForge\PhpSource\Tests\Writer;
 
-use PhpNoobs\PhpSource\Parser\UserLandParser;
-use PhpNoobs\PhpSource\Writer\NativeFileWriter;
+use BabelForge\PhpSource\Parser\UserLandParser;
+use BabelForge\PhpSource\Writer\NativeFileWriter;
 use PHPUnit\Framework\TestCase;
 
 /**

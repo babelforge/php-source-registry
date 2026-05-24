@@ -9,7 +9,7 @@ The public API loads virtual files, exposes AST nodes, registers updates, and sa
 Use `PhpSourceRegistryInstance` when application services need to share the same loaded source state:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
 
 $registry = new PhpSourceRegistryInstance();
 $virtualFiles = $registry->getVirtualFiles('/project/src/UserService.php');
@@ -22,8 +22,8 @@ The instance uses `NativeFileWriter` by default, so `save()` writes to disk unle
 Inject a custom writer when tests or integrations need to capture writes:
 
 ```php
-use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\Contracts\FileWriterInterface;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
 
 /** @var FileWriterInterface $writer */
 $registry = new PhpSourceRegistryInstance($writer);
@@ -34,7 +34,7 @@ $registry = new PhpSourceRegistryInstance($writer);
 The static facade keeps a current registry instance:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistry;
+use BabelForge\PhpSource\PhpSourceRegistry;
 
 PhpSourceRegistry::clear();
 $virtualFiles = PhpSourceRegistry::getVirtualFiles('/project/src/UserService.php');
@@ -43,8 +43,8 @@ $virtualFiles = PhpSourceRegistry::getVirtualFiles('/project/src/UserService.php
 The facade also uses `NativeFileWriter` by default. Override it before loading files when needed:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistry;
-use PhpNoobs\PhpSource\Writer\NativeFileWriter;
+use BabelForge\PhpSource\PhpSourceRegistry;
+use BabelForge\PhpSource\Writer\NativeFileWriter;
 
 PhpSourceRegistry::clear();
 PhpSourceRegistry::setFileWriter(new NativeFileWriter());

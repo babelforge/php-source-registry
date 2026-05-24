@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Tests;
+namespace BabelForge\PhpSource\Tests;
 
-use PhpNoobs\PhpSource\Parser\UserLandParser;
-use PhpNoobs\PhpSource\VirtualPhpSourceFile;
-use PhpNoobs\PhpSource\VirtualPhpSourceFileCollection;
-use PhpNoobs\PhpSource\VirtualPhpSourceFileProducer;
+use BabelForge\PhpSource\Parser\UserLandParser;
+use BabelForge\PhpSource\VirtualPhpSourceFile;
+use BabelForge\PhpSource\VirtualPhpSourceFileCollection;
+use BabelForge\PhpSource\VirtualPhpSourceFileProducer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Function_;

@@ -2,14 +2,14 @@
 
 Navigation: [Documentation](README.md) | [Previous: Public Usage](02-public-usage.md) | [Next: Testing And Maintenance](04-testing-and-maintenance.md)
 
-`PhpSourceRegistry` provides a concrete local filesystem writer through `PhpNoobs\PhpSource\Writer\NativeFileWriter`.
+`PhpSourceRegistry` provides a concrete local filesystem writer through `BabelForge\PhpSource\Writer\NativeFileWriter`.
 
 ## NativeFileWriter
 
 `NativeFileWriter` implements `FileWriterInterface`:
 
 ```php
-use PhpNoobs\PhpSource\Writer\NativeFileWriter;
+use BabelForge\PhpSource\Writer\NativeFileWriter;
 
 $writer = new NativeFileWriter();
 $writer->writeContent('/project/src/Generated.php', '<?php echo "ok";');
@@ -18,7 +18,7 @@ $writer->writeContent('/project/src/Generated.php', '<?php echo "ok";');
 The writer can also render PHPParser AST nodes:
 
 ```php
-use PhpNoobs\PhpSource\Writer\NativeFileWriter;
+use BabelForge\PhpSource\Writer\NativeFileWriter;
 
 $writer = new NativeFileWriter();
 $writer->writeAst($ast, '/project/src/Generated.php');
@@ -50,7 +50,7 @@ The writer throws `RuntimeException` when:
 `php-rename` can mutate virtual files in memory, then let this package write the physical files:
 
 ```php
-use PhpNoobs\PhpSource\PhpSourceRegistryInstance;
+use BabelForge\PhpSource\PhpSourceRegistryInstance;
 
 $registry = new PhpSourceRegistryInstance();
 

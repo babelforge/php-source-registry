@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace PhpNoobs\PhpSource\Writer;
+namespace BabelForge\PhpSource\Writer;
 
-use PhpNoobs\PhpSource\Contracts\FileWriterInterface;
-use PhpNoobs\PhpSource\Printer\NopPrinter;
+use BabelForge\PhpSource\Contracts\FileWriterInterface;
+use BabelForge\PhpSource\Printer\NopPrinter;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 
